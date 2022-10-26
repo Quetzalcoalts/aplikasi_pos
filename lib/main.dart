@@ -45,7 +45,7 @@ void main() async {
             style: ElevatedButton.styleFrom(
               backgroundColor: buttonColor,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              textStyle: GoogleFonts.nunito(
+              textStyle: GoogleFonts.inter(
                   color: lightText,
                   fontWeight: FontWeight.w800,
                   fontSize: 14,
@@ -56,8 +56,8 @@ void main() async {
             ),
           ),
           scaffoldBackgroundColor: scaffoldBackgroundColor,
-          cardColor: cardColor,
-          textTheme: GoogleFonts.nunitoTextTheme(
+          cardColor: scaffoldBackgroundColor,
+          textTheme: GoogleFonts.interTextTheme(
             TextTheme(
               headline1: GoogleFonts.nunito(
                 color: darkText,
