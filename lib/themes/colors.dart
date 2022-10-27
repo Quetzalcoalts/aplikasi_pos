@@ -26,3 +26,5 @@ Color lightText = const Color(0xffffffff);
 Color darkText = const Color(0xff000000);
 
 Color dividerColor = const Color(0xff000000).withOpacity(0.2);
+
+Color textfield = const Color(0xffE5E5E5);

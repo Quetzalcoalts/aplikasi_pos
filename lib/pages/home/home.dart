@@ -1,4 +1,5 @@
 //ignore_for_file: todo
+import 'package:aplikasi_pos/pages/authentication/auth.dart';
 import 'package:aplikasi_pos/pages/pembukuan/pembukuan.dart';
 import 'package:aplikasi_pos/pages/penjualan/penjualan.dart';
 import 'package:aplikasi_pos/pages/stock/stock.dart';
@@ -43,7 +44,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return AuthPage();
+              }));
+            },
             icon: Icon(
               Icons.settings,
               color: darkText,
