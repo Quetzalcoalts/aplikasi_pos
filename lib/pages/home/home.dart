@@ -13,7 +13,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
   @override
   void initState() {
@@ -24,105 +25,124 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _tabController.dispose();
     // TODO: implement dispose
     super.dispose();
   }
 
   @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "A",
-          style: TextStyle(
-            color: darkText,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.settings,
+    return GestureDetector(
+      //KELUAR DARI INPUT KEYBOARD DENGAN MENEKAN HALAMAN/SCAFFOLD SAAT MELAKUKAN SEARCH
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            _tabController.index == 0
+                ? "Penjualan"
+                : _tabController.index == 1
+                    ? "Stock"
+                    : _tabController.index == 2
+                        ? "Pembukuan"
+                        : "",
+            style: TextStyle(
               color: darkText,
             ),
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-            child: Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TabBar(
-                controller: _tabController,
-                isScrollable: false,
-                labelColor: lightText,
-                indicatorColor: Colors.transparent,
-                unselectedLabelColor: darkText,
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: buttonColor,
-                ),
-                labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-                labelStyle: GoogleFonts.nunito(
-                    color: lightText,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14,
-                    letterSpacing: 0.125),
-                tabs: const <Widget>[
-                  Tab(
-                    text: "Stock",
-                  ),
-                  Tab(
-                    text: "Penjualan",
-                  ),
-                  Tab(
-                    text: "Pembukuan",
-                  ),
-                ],
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.settings,
+                color: darkText,
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
+          ],
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 5,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
-                ),
-                child: TabBarView(
+                child: TabBar(
+                  onTap: (index) {
+                    setState(() {});
+                  },
                   controller: _tabController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: const [
-                    StockPage(),
-                    PenjualanPage(),
-                    PembukuanPage(),
+                  isScrollable: false,
+                  labelColor: lightText,
+                  indicatorColor: Colors.transparent,
+                  unselectedLabelColor: darkText,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: buttonColor,
+                  ),
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  labelStyle: GoogleFonts.nunito(
+                      color: lightText,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 14,
+                      letterSpacing: 0.125),
+                  tabs: const <Widget>[
+                    Tab(
+                      text: "Penjualan",
+                    ),
+                    Tab(
+                      text: "Stock",
+                    ),
+                    Tab(
+                      text: "Pembukuan",
+                    ),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 5,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                  child: TabBarView(
+                    controller: _tabController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: const [
+                      PenjualanPage(),
+                      StockPage(),
+                      PembukuanPage(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

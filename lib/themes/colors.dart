@@ -13,7 +13,8 @@ Color buttonColor = const Color(0xff40a0a0);
 Color cancelButtonColor = const Color(0xff000000);
 
 Color cardColor = const Color(0xffe2eff1);
-Color cardInfoColor = const Color(0xffccea77);
+Color cardInfoColor1 = const Color(0xFFD0CFCF);
+Color cardInfoColor2 = const Color(0xFFE8E7E7);
 
 Color errorColor = const Color(0xffd32f2f);
 Color correctColor = const Color(0xff4caf50);
@@ -24,5 +25,6 @@ Color scaffoldBackgroundColor = const Color(0xffffffff);
 
 Color lightText = const Color(0xffffffff);
 Color darkText = const Color(0xff000000);
+Color filterText = const Color(0xFF40a0a0);
 
 Color dividerColor = const Color(0xff000000).withOpacity(0.2);
