@@ -1,13 +1,5 @@
-import 'package:flutter/material.dart';
-
-class Filter {
-  String label;
-  Color color;
-  Filter(this.label, this.color);
-}
 
 // DATACLASS PEMBUKUAN
-
 class PembukuanTransaksi {
   String idTransaksi;
   String tanggalTransaksig;
@@ -26,16 +18,4 @@ class IsiPembukuanTransaksi {
 
   IsiPembukuanTransaksi(this.namaBarang, this.jumlahBarang, this.hargaBarang,
       this.subTotalBarang);
-}
-
-// DATACLASS STOCK
-
-class StockBarang {
-  String idStockBarang;
-  String namaStockBarang;
-  String jumlahStockBarang;
-  String hargaStockBarang;
-
-  StockBarang(this.idStockBarang, this.namaStockBarang, this.jumlahStockBarang,
-      this.hargaStockBarang);
 }

@@ -1,17 +1,19 @@
 //ignore_for_file: todo
 
-import 'package:aplikasi_pos/services/class/dataclass.dart';
+import 'package:aplikasi_pos/pages/pembukuan/dataclass.dart';
+import 'package:aplikasi_pos/pages/pembukuan/services.dart';
+import 'package:aplikasi_pos/class/dataclass.dart';
 import 'package:aplikasi_pos/themes/colors.dart';
-import 'package:aplikasi_pos/widgets/stringextension.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
-enum RadioFilterTanggal { harian, mingguan, bulanan, tahunan }
+enum RadioFilterTanggal { harian, bulanan, tahunan }
 
-enum RadioFilterStatus { sukses, pending, none }
+enum RadioFilterUrutan { ascending, descending }
 
 class PembukuanPage extends StatefulWidget {
   const PembukuanPage({super.key});
@@ -22,17 +24,35 @@ class PembukuanPage extends StatefulWidget {
 
 class _PembukuanPageState extends State<PembukuanPage>
     with AutomaticKeepAliveClientMixin {
+  ServicesPembukuan servicesPembukuan = ServicesPembukuan();
+
   final _controllerSearchBar = TextEditingController();
   final _controllerScrollBar = ScrollController();
-  int _selectedIndexChipsFilter = 0;
 
+  int _selectedIndexChipsFilter = 0;
+  int _filterTanggalIndex = 0;
+  bool _filterTanggalCheck = false;
+
+  late Future _pembukuanTransaksi;
   List<PembukuanTransaksi> pembukuanTransaksi = [];
   List<IsiPembukuanTransaksi> displayTransaksi = [];
   final List<Filter> _chipsFilterList = List.empty(growable: true);
 
-  DateTime selectedDate = DateTime.now();
-  String formattedDate = "";
-  String date = "Date";
+  DateTime _selectedDateFrom = DateTime.now();
+  String _formattedDateFrom = "";
+  String _dateFrom = "Date";
+
+  DateTime _selectedDateTo = DateTime.now();
+  String _formattedDateTo = "";
+  String _dateTo = "Date";
+
+  DateTime _selectedDateBulan = DateTime.now();
+  String _formattedDateBulan = "";
+  String _dateBulan = "Date";
+
+  DateTime _selectedDateTahun = DateTime.now();
+  String _formattedDateTahun = "";
+  String _dateTahun = "Date";
 
   @override
   // TODO: implement wantKeepAlive
@@ -42,12 +62,13 @@ class _PembukuanPageState extends State<PembukuanPage>
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    formattedDate = DateFormat('dd-MM-yyyy').format(selectedDate);
-    date = formattedDate;
+    _pembukuanTransaksi = servicesPembukuan.getPembukuan(DateTime.now());
     addPembukuanTransaksi();
     addIsiPembukuanTransaksi();
-    _chipsFilterList.add(Filter("Semua", Colors.white));
+    initialSelectedDate();
+    _selectedIndexChipsFilter = 0;
+    _filterTanggalIndex = 0;
+    _filterTanggalCheck = false;
   }
 
   @override
@@ -58,12 +79,266 @@ class _PembukuanPageState extends State<PembukuanPage>
     _controllerScrollBar.dispose();
   }
 
-  String formatDateToString(DateTime value) {
-    selectedDate = value;
-    formattedDate = DateFormat('dd-MM-yyyy').format(selectedDate);
-    date = formattedDate;
-    return date;
+  void initialSelectedDate() {
+    _formattedDateFrom = DateFormat('dd-MM-yyyy').format(_selectedDateFrom);
+    _dateFrom = _formattedDateFrom;
+
+    _formattedDateTo = DateFormat('dd-MM-yyyy').format(_selectedDateTo);
+    _dateTo = _formattedDateTo;
+
+    _formattedDateBulan = DateFormat('MM-yyyy').format(_selectedDateBulan);
+    _dateBulan = _formattedDateBulan;
+
+    _formattedDateTahun = DateFormat('yyyy').format(_selectedDateTahun);
+    _dateTahun = _formattedDateTahun;
   }
+
+  Future<void> selectFilterDateFrom(context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateFrom,
+      firstDate: DateTime(DateTime.now().year - 10, 1, 1),
+      lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+      builder: (context, child) {
+        return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: buttonColor, // header background color
+                onPrimary: lightText, // header text color
+                onSurface: darkText, // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: navButtonPrimary, // button text color
+                ),
+              ),
+            ),
+            child: child!);
+      },
+    );
+    if (picked != null && picked != _selectedDateFrom) {
+      if (mounted) {
+        _selectedDateFrom = picked;
+        _formattedDateFrom = DateFormat('dd-MM-yyyy').format(_selectedDateFrom);
+        _dateFrom = _formattedDateFrom;
+
+        setState(() {});
+      }
+    }
+  }
+
+  Future<void> selectFilterDateTo(context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateTo,
+      firstDate: DateTime(DateTime.now().year - 10, 1, 1),
+      lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+      builder: (context, child) {
+        return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: buttonColor, // header background color
+                onPrimary: lightText, // header text color
+                onSurface: darkText, // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: navButtonPrimary, // button text color
+                ),
+              ),
+            ),
+            child: child!);
+      },
+    );
+    if (picked != null && picked != _selectedDateTo) {
+      if (mounted) {
+        _selectedDateTo = picked;
+        _formattedDateTo = DateFormat('dd-MM-yyyy').format(_selectedDateTo);
+        _dateTo = _formattedDateTo;
+
+        setState(() {});
+      }
+    }
+  }
+
+  // Future<void> selectFilterDateBulan(context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: _selectedDateBulan,
+  //     firstDate: DateTime(DateTime.now().year - 10, 1, 1),
+  //     lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+  //     builder: (context, child) {
+  //       return Theme(
+  //           data: Theme.of(context).copyWith(
+  //             colorScheme: ColorScheme.light(
+  //               primary: buttonColor, // header background color
+  //               onPrimary: lightText, // header text color
+  //               onSurface: darkText, // body text color
+  //             ),
+  //             textButtonTheme: TextButtonThemeData(
+  //               style: TextButton.styleFrom(
+  //                 foregroundColor: navButtonPrimary, // button text color
+  //               ),
+  //             ),
+  //           ),
+  //           child: child!);
+  //     },
+  //   );
+  //   if (picked != null && picked != _selectedDateBulan) {
+  //     if (mounted) {
+  //       _selectedDateBulan = picked;
+  //       var tempBulan = _selectedDateBulan.month;
+  //       var tempTahun = _selectedDateBulan.year;
+  //       _dateBulan = "$tempBulan-$tempTahun";
+
+  //       setState(() {});
+  //     }
+  //   }
+  // }
+
+  Future<void> selectFilterDateBulan(context) async {
+    final DateTime? picked = await showMonthYearPicker(
+      context: context,
+      initialDate: _selectedDateBulan,
+      firstDate: DateTime(DateTime.now().year - 10, 1, 1),
+      lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+      builder: (context, child) {
+        return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: buttonColor, // header background color
+                onPrimary: lightText, // header text color
+                onSurface: darkText, // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: navButtonPrimary, // button text color
+                ),
+              ),
+            ),
+            child: child!);
+      },
+    );
+    if (picked != null && picked != _selectedDateBulan) {
+      if (mounted) {
+        _selectedDateBulan = picked;
+        _formattedDateBulan = DateFormat('MM-yyyy').format(_selectedDateBulan);
+        _dateBulan = _formattedDateBulan;
+
+        setState(() {});
+      }
+    }
+  }
+
+  // Future<void> selectFilterDateTahun(context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: _selectedDateTahun,
+  //     firstDate: DateTime(DateTime.now().year - 10, 1, 1),
+  //     lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+  //     builder: (context, child) {
+  //       return Theme(
+  //           data: Theme.of(context).copyWith(
+  //             colorScheme: ColorScheme.light(
+  //               primary: buttonColor, // header background color
+  //               onPrimary: lightText, // header text color
+  //               onSurface: darkText, // body text color
+  //             ),
+  //             textButtonTheme: TextButtonThemeData(
+  //               style: TextButton.styleFrom(
+  //                 foregroundColor: navButtonPrimary, // button text color
+  //               ),
+  //             ),
+  //           ),
+  //           child: child!);
+  //     },
+  //   );
+  //   if (picked != null && picked != _selectedDateTahun) {
+  //     if (mounted) {
+  //       _selectedDateTahun = picked;
+  //       var tempTahun = _selectedDateTahun.year;
+  //       _dateTahun = "$tempTahun";
+
+  //       setState(() {});
+  //     }
+  //   }
+  // }
+
+  Future selectFilterDateTahun(context, dw, dh) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Center(
+                child: Text(
+                  "SELECT YEAR",
+                  style: GoogleFonts.nunito(
+                      fontSize: 14,
+                      letterSpacing: 0.125,
+                      color: filterText,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              content: Container(
+                width: 300,
+                height: 300,
+                child: YearPicker(
+                  firstDate: DateTime(DateTime.now().year - 10, 1),
+                  lastDate: DateTime(DateTime.now().year + 10, 1),
+                  initialDate: DateTime.now(),
+                  currentDate: _selectedDateTahun,
+                  selectedDate: _selectedDateTahun,
+                  onChanged: (DateTime dateTime) {
+                    _selectedDateTahun = dateTime;
+                    print(_selectedDateTahun.year);
+                    setState(() {});
+                  },
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "CANCEL",
+                    style: GoogleFonts.nunito(
+                        fontSize: 14,
+                        letterSpacing: 0.125,
+                        color: navButtonPrimary,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _dateTahun = "${_selectedDateTahun.year}";
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "OK",
+                    style: GoogleFonts.nunito(
+                        fontSize: 14,
+                        letterSpacing: 0.125,
+                        color: navButtonPrimary,
+                        fontWeight: FontWeight.w600),
+                  ),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // String formatDateToString(DateTime value) {
+  //   _selectedDate = value;
+  //   _formattedDate = DateFormat('dd-MM-yyyy').format(_selectedDate);
+  //   _date = _formattedDate;
+  //   return _date;
+  // }
 
   void filterBulanan() {
     debugPrint("Filter Bulanan");
@@ -124,17 +399,10 @@ class _PembukuanPageState extends State<PembukuanPage>
   }
 
   void addPembukuanTransaksi() {
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 10; i++) {
       pembukuanTransaksi.add(
-        PembukuanTransaksi(
-            "P00${i * i * i * i}",
-            formatDateToString(
-              DateTime.now().add(
-                const Duration(days: 1),
-              ),
-            ),
-            "${2400000 * (i + 1)}",
-            "Selesai"),
+        PembukuanTransaksi("P00${i * i * i * i}", "09-12-2022",
+            "${2400000 * (i + 1)}", "Selesai"),
       );
     }
   }
@@ -152,7 +420,7 @@ class _PembukuanPageState extends State<PembukuanPage>
   //FUNGSI FILTERING PEMBUKUAN
   void filterPembukuanTransaksi(dw, dh) {
     RadioFilterTanggal? radioFilterTanggal;
-    RadioFilterStatus? radioFilterStatus;
+    RadioFilterUrutan? radioFilterUrutan;
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -184,7 +452,7 @@ class _PembukuanPageState extends State<PembukuanPage>
                           child: Text(
                             "Filter",
                             style: GoogleFonts.nunito(
-                                fontSize: 16,
+                                fontSize: 18,
                                 letterSpacing: 0.125,
                                 color: darkText,
                                 fontWeight: FontWeight.w800),
@@ -196,245 +464,194 @@ class _PembukuanPageState extends State<PembukuanPage>
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 24, horizontal: 16),
+                              vertical: 24, horizontal: 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Filter Sesuai Tanggal",
-                                style: GoogleFonts.nunito(
-                                    fontSize: 14,
-                                    letterSpacing: 0.125,
-                                    color: filterText,
-                                    fontWeight: FontWeight.w600),
+                              Row(),
+                              // Padding(
+                              //   padding:
+                              //       const EdgeInsets.symmetric(horizontal: 16),
+                              //   child: Text(
+                              //     "Filter Sesuai Urutan",
+                              //     style: GoogleFonts.nunito(
+                              //         fontSize: 14,
+                              //         letterSpacing: 0.125,
+                              //         color: filterText,
+                              //         fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
+                              // Wrap(
+                              //   crossAxisAlignment: WrapCrossAlignment.center,
+                              //   children: [
+                              //     Wrap(
+                              //       crossAxisAlignment:
+                              //           WrapCrossAlignment.center,
+                              //       children: [
+                              //         Radio(
+                              //           value: RadioFilterUrutan.ascending,
+                              //           groupValue: radioFilterUrutan,
+                              //           activeColor: filterText,
+                              //           onChanged: (value) {
+                              //             radioFilterUrutan =
+                              //                 value as RadioFilterUrutan;
+
+                              //             if (mounted) {
+                              //               debugPrint(value.name);
+                              //               setState(() {});
+                              //             }
+                              //           },
+                              //         ),
+                              //         Text(
+                              //           "Ascending",
+                              //           style: GoogleFonts.nunito(
+                              //               fontSize: 14,
+                              //               letterSpacing: 0.125,
+                              //               color: darkText,
+                              //               fontWeight: FontWeight.w600),
+                              //         )
+                              //       ],
+                              //     ),
+                              //     Wrap(
+                              //       crossAxisAlignment:
+                              //           WrapCrossAlignment.center,
+                              //       children: [
+                              //         Radio(
+                              //           value: RadioFilterUrutan.descending,
+                              //           groupValue: radioFilterUrutan,
+                              //           activeColor: filterText,
+                              //           onChanged: (value) {
+                              //             radioFilterUrutan =
+                              //                 value as RadioFilterUrutan;
+                              //             if (mounted) {
+                              //               debugPrint(value.name);
+                              //               setState(() {});
+                              //             }
+                              //           },
+                              //         ),
+                              //         Text(
+                              //           "Descending",
+                              //           style: GoogleFonts.nunito(
+                              //               fontSize: 14,
+                              //               letterSpacing: 0.125,
+                              //               color: darkText,
+                              //               fontWeight: FontWeight.w600),
+                              //         )
+                              //       ],
+                              //     ),
+                              //   ],
+                              // ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  "Filter Sesuai Tanggal",
+                                  style: GoogleFonts.nunito(
+                                      fontSize: 14,
+                                      letterSpacing: 0.125,
+                                      color: filterText,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
-                              Row(
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
                                 children: [
-                                  Expanded(
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Radio(
-                                          value: RadioFilterTanggal.harian,
-                                          groupValue: radioFilterTanggal,
-                                          activeColor: filterText,
-                                          onChanged: (value) {
-                                            radioFilterTanggal =
-                                                value as RadioFilterTanggal;
-                                            if (mounted) {
-                                              debugPrint(value.name);
-                                              setState(() {});
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "Harian",
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 14,
-                                              letterSpacing: 0.125,
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
+                                  Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Radio(
+                                        value: RadioFilterTanggal.harian,
+                                        groupValue: radioFilterTanggal,
+                                        activeColor: filterText,
+                                        onChanged: (value) {
+                                          radioFilterTanggal =
+                                              value as RadioFilterTanggal;
+                                          _filterTanggalCheck = true;
+                                          _filterTanggalIndex = 0;
+                                          if (mounted) {
+                                            debugPrint(value.name);
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                      Text(
+                                        "Harian",
+                                        style: GoogleFonts.nunito(
+                                            fontSize: 14,
+                                            letterSpacing: 0.125,
+                                            color: darkText,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
                                   ),
-                                  Expanded(
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Radio(
-                                          value: RadioFilterTanggal.mingguan,
-                                          groupValue: radioFilterTanggal,
-                                          activeColor: filterText,
-                                          onChanged: (value) {
-                                            radioFilterTanggal =
-                                                value as RadioFilterTanggal;
-                                            if (mounted) {
-                                              debugPrint(value.name);
-                                              setState(() {});
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "Mingguan",
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 14,
-                                              letterSpacing: 0.125,
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
+                                  Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Radio(
+                                        value: RadioFilterTanggal.bulanan,
+                                        groupValue: radioFilterTanggal,
+                                        activeColor: filterText,
+                                        onChanged: (value) {
+                                          radioFilterTanggal =
+                                              value as RadioFilterTanggal;
+                                          _filterTanggalCheck = true;
+                                          _filterTanggalIndex = 1;
+                                          if (mounted) {
+                                            debugPrint(value.name);
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                      Text(
+                                        "Bulanan",
+                                        style: GoogleFonts.nunito(
+                                            fontSize: 14,
+                                            letterSpacing: 0.125,
+                                            color: darkText,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
                                   ),
-                                  Expanded(
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Radio(
-                                          value: RadioFilterTanggal.bulanan,
-                                          groupValue: radioFilterTanggal,
-                                          activeColor: filterText,
-                                          onChanged: (value) {
-                                            radioFilterTanggal =
-                                                value as RadioFilterTanggal;
-                                            if (mounted) {
-                                              debugPrint(value.name);
-                                              setState(() {});
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "Bulanan",
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 14,
-                                              letterSpacing: 0.125,
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Radio(
-                                          value: RadioFilterTanggal.tahunan,
-                                          groupValue: radioFilterTanggal,
-                                          activeColor: filterText,
-                                          onChanged: (value) {
-                                            radioFilterTanggal =
-                                                value as RadioFilterTanggal;
-                                            if (mounted) {
-                                              debugPrint(value.name);
-                                              setState(() {});
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "Tahunan",
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 14,
-                                              letterSpacing: 0.125,
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
+                                  Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Radio(
+                                        value: RadioFilterTanggal.tahunan,
+                                        groupValue: radioFilterTanggal,
+                                        activeColor: filterText,
+                                        onChanged: (value) {
+                                          radioFilterTanggal =
+                                              value as RadioFilterTanggal;
+                                          _filterTanggalCheck = true;
+                                          _filterTanggalIndex = 2;
+                                          if (mounted) {
+                                            debugPrint(value.name);
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                      Text(
+                                        "Tahunan",
+                                        style: GoogleFonts.nunito(
+                                            fontSize: 14,
+                                            letterSpacing: 0.125,
+                                            color: darkText,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              Text(
-                                "Filter Sesuai Status",
-                                style: GoogleFonts.nunito(
-                                    fontSize: 14,
-                                    letterSpacing: 0.125,
-                                    color: filterText,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Radio(
-                                          value: RadioFilterStatus.sukses,
-                                          groupValue: radioFilterStatus,
-                                          activeColor: filterText,
-                                          onChanged: (value) {
-                                            radioFilterStatus =
-                                                value as RadioFilterStatus;
-                                            _chipsFilterList.add(Filter(
-                                                value.name.capitalize(),
-                                                Colors.white));
-                                            if (mounted) {
-                                              debugPrint(value.name);
-                                              setState(() {});
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "Sukses",
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 14,
-                                              letterSpacing: 0.125,
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Radio(
-                                          value: RadioFilterStatus.pending,
-                                          groupValue: radioFilterStatus,
-                                          activeColor: filterText,
-                                          onChanged: (value) {
-                                            radioFilterStatus =
-                                                value as RadioFilterStatus;
-                                            if (mounted) {
-                                              debugPrint(value.name);
-                                              setState(() {});
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "Pending",
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 14,
-                                              letterSpacing: 0.125,
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Radio(
-                                          value: RadioFilterStatus.none,
-                                          groupValue: radioFilterStatus,
-                                          activeColor: filterText,
-                                          onChanged: (value) {
-                                            radioFilterStatus =
-                                                value as RadioFilterStatus;
-                                            if (mounted) {
-                                              debugPrint(value.name);
-                                              setState(() {});
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "None",
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 14,
-                                              letterSpacing: 0.125,
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(),
-                                  ),
-                                ],
+                              // const SizedBox(
+                              //   height: 25,
+                              // ),
+                              Visibility(
+                                visible: _filterTanggalCheck,
+                                child: filterTanggalWidget(context,
+                                    _filterTanggalIndex, setState, dw, dh),
                               ),
                             ],
                           ),
@@ -448,6 +665,10 @@ class _PembukuanPageState extends State<PembukuanPage>
                             Expanded(
                               child: TextButton(
                                 onPressed: () {
+                                  initialSelectedDate();
+                                  _selectedIndexChipsFilter = 0;
+                                  _filterTanggalIndex = 0;
+                                  _filterTanggalCheck = false;
                                   _chipsFilterList
                                       .add(Filter("All", Colors.white));
                                   Navigator.pop(context);
@@ -478,7 +699,29 @@ class _PembukuanPageState extends State<PembukuanPage>
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (_filterTanggalIndex == 0) {
+                                      print(_dateFrom + " " + _dateTo);
+                                      _pembukuanTransaksi =
+                                          servicesPembukuan.getFilterPembukuan(
+                                              _dateFrom, _dateTo, 1);
+                                    } else if (_filterTanggalIndex == 1) {
+                                      print(_dateBulan);
+                                      _pembukuanTransaksi =
+                                          servicesPembukuan.getFilterPembukuan(
+                                              _dateBulan, "", 2);
+                                    } else if (_filterTanggalIndex == 2) {
+                                      print(_dateTahun);
+                                      _pembukuanTransaksi =
+                                          servicesPembukuan.getFilterPembukuan(
+                                              _dateTahun, "", 3);
+                                    }
+                                    initialSelectedDate();
+                                    _selectedIndexChipsFilter = 0;
+                                    _filterTanggalIndex = 0;
+                                    _filterTanggalCheck = false;
+                                    Navigator.pop(context);
+                                  },
                                   child: Text(
                                     "Ok",
                                     style: GoogleFonts.nunito(
@@ -501,7 +744,162 @@ class _PembukuanPageState extends State<PembukuanPage>
           },
         );
       },
-    );
+    ).whenComplete(() => setState(() {}));
+  }
+
+  filterTanggalWidget(context, index, StateSetter setState, dw, dh) {
+    if (index == 0) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Dari Tanggal",
+              style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  letterSpacing: 0.125,
+                  color: filterText,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                selectFilterDateFrom(context).then((value) => setState(() {}));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: cardInfoColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_dateFrom),
+                    const Icon(Icons.calendar_month),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              "Sampai Tanggal",
+              style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  letterSpacing: 0.125,
+                  color: filterText,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                selectFilterDateTo(context).then((value) => setState(() {}));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: cardInfoColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_dateTo),
+                    const Icon(Icons.calendar_month),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (index == 1) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Pilih Bulan",
+              style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  letterSpacing: 0.125,
+                  color: filterText,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                selectFilterDateBulan(context).then((value) => setState(() {}));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: cardInfoColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_dateBulan),
+                    const Icon(Icons.calendar_month),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (index == 2) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Pilih Tahun",
+              style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  letterSpacing: 0.125,
+                  color: filterText,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                selectFilterDateTahun(context, dw, dh)
+                    .whenComplete(() => setState(() {}));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: cardInfoColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_dateTahun),
+                    const Icon(Icons.calendar_month),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -587,7 +985,7 @@ class _PembukuanPageState extends State<PembukuanPage>
                         Wrap(
                           spacing: 6,
                           direction: Axis.horizontal,
-                          children: generateFilterChips(),
+                          // children: generateFilterChips(),
                         ),
                         IconButton(
                           onPressed: () {
@@ -655,305 +1053,74 @@ class _PembukuanPageState extends State<PembukuanPage>
                             ),
                           ),
                           Expanded(
-                            child: Scrollbar(
-                              radius: const Radius.circular(8),
-                              thumbVisibility: true,
-                              controller: _controllerScrollBar,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                controller: _controllerScrollBar,
-                                itemCount: pembukuanTransaksi.length,
-                                itemBuilder: (context, index) {
-                                  return SizedBox(
-                                    width: deviceWidth,
-                                    child: Column(
-                                      children: [
-                                        //ISI TABEL PEMBUKUAN
-                                        Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          elevation: 4,
-                                          color: index % 2 == 0
-                                              ? cardInfoColor1
-                                              : cardInfoColor2,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8),
-                                            child: Theme(
-                                              data: theme,
-                                              child: ExpansionTile(
-                                                key: UniqueKey(),
-                                                collapsedTextColor: darkText,
-                                                textColor: darkText,
-                                                collapsedIconColor: darkText,
-                                                iconColor: darkText,
-                                                initiallyExpanded: false,
-                                                maintainState: true,
-                                                childrenPadding:
-                                                    const EdgeInsets.symmetric(
+                            child: FutureBuilder(
+                              future: _pembukuanTransaksi,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  List snapData = snapshot.data! as List;
+                                  if (snapData[0] != 404) {
+                                    return Scrollbar(
+                                      radius: const Radius.circular(8),
+                                      thumbVisibility: true,
+                                      controller: _controllerScrollBar,
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        controller: _controllerScrollBar,
+                                        itemCount: snapData[1].length,
+                                        itemBuilder: (context, index) {
+                                          print(snapData[1]);
+                                          return SizedBox(
+                                            width: deviceWidth,
+                                            child: Column(
+                                              children: [
+                                                //ISI TABEL PEMBUKUAN
+                                                Card(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  elevation: 4,
+                                                  color: index % 2 == 0
+                                                      ? cardInfoColor1
+                                                      : cardInfoColor2,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
                                                         horizontal: 8),
-                                                tilePadding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8),
-                                                title: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 5,
-                                                      child: Text(
-                                                        pembukuanTransaksi[
-                                                                index]
-                                                            .idTransaksi,
-                                                        style:
-                                                            GoogleFonts.nunito(
-                                                          fontSize: 13,
-                                                          letterSpacing: 0.125,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 5,
-                                                      child: Text(
-                                                        pembukuanTransaksi[
-                                                                index]
-                                                            .tanggalTransaksig,
-                                                        style:
-                                                            GoogleFonts.nunito(
-                                                          fontSize: 13,
-                                                          letterSpacing: 0.125,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 5,
-                                                      child: Text(
-                                                        NumberFormat
-                                                                .simpleCurrency(
-                                                                    locale:
-                                                                        'id-ID',
-                                                                    name:
-                                                                        "Rp. ")
-                                                            .format(
-                                                          double.parse(
-                                                            pembukuanTransaksi[
-                                                                    index]
-                                                                .totalTransaksi,
-                                                          ),
-                                                        ),
-                                                        style:
-                                                            GoogleFonts.nunito(
-                                                          fontSize: 13,
-                                                          letterSpacing: 0.125,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      Divider(
-                                                        color: dividerColor,
-                                                        thickness: 2,
-                                                        height: 2,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 16),
-                                                        child: Row(
-                                                          children: [
-                                                            Expanded(
-                                                              flex: 4,
-                                                              child: Text(
-                                                                "Nama Barang",
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .nunito(
-                                                                  fontSize: 13,
-                                                                  letterSpacing:
-                                                                      0.125,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Text(
-                                                                "Jumlah",
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .nunito(
-                                                                  fontSize: 13,
-                                                                  letterSpacing:
-                                                                      0.125,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Text(
-                                                                "Harga",
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .nunito(
-                                                                  fontSize: 13,
-                                                                  letterSpacing:
-                                                                      0.125,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Text(
-                                                                "Sub Total",
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .nunito(
-                                                                  fontSize: 13,
-                                                                  letterSpacing:
-                                                                      0.125,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
+                                                    child: Theme(
+                                                      data: theme,
+                                                      child: ExpansionTile(
+                                                        key: UniqueKey(),
+                                                        collapsedTextColor:
+                                                            darkText,
+                                                        textColor: darkText,
+                                                        collapsedIconColor:
+                                                            darkText,
+                                                        iconColor: darkText,
+                                                        initiallyExpanded:
+                                                            false,
+                                                        maintainState: true,
+                                                        childrenPadding:
                                                             const EdgeInsets
                                                                     .symmetric(
-                                                                vertical: 8),
-                                                        child: DottedLine(
-                                                          lineThickness: 2,
-                                                          dashGapLength: 2,
-                                                          dashLength: 3,
-                                                          dashColor:
-                                                              dividerColor,
-                                                        ),
-                                                      ),
-                                                      ListView.builder(
-                                                        shrinkWrap: true,
-                                                        scrollDirection:
-                                                            Axis.vertical,
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
-                                                        itemCount:
-                                                            displayTransaksi
-                                                                .length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return SizedBox(
-                                                            width: deviceWidth,
-                                                            child: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  flex: 4,
-                                                                  child: Text(
-                                                                    displayTransaksi[
-                                                                            index]
-                                                                        .namaBarang,
-                                                                    style: GoogleFonts
-                                                                        .nunito(
-                                                                      fontSize:
-                                                                          13,
-                                                                      letterSpacing:
-                                                                          0.125,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 2,
-                                                                  child: Text(
-                                                                    displayTransaksi[
-                                                                            index]
-                                                                        .jumlahBarang,
-                                                                    style: GoogleFonts
-                                                                        .nunito(
-                                                                      fontSize:
-                                                                          13,
-                                                                      letterSpacing:
-                                                                          0.125,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 2,
-                                                                  child: Text(
-                                                                    displayTransaksi[
-                                                                            index]
-                                                                        .hargaBarang,
-                                                                    style: GoogleFonts
-                                                                        .nunito(
-                                                                      fontSize:
-                                                                          13,
-                                                                      letterSpacing:
-                                                                          0.125,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 2,
-                                                                  child: Text(
-                                                                    NumberFormat.simpleCurrency(
-                                                                            locale:
-                                                                                'id-ID',
-                                                                            name:
-                                                                                "")
-                                                                        .format(
-                                                                      double
-                                                                          .parse(
-                                                                        displayTransaksi[index]
-                                                                            .subTotalBarang,
-                                                                      ),
-                                                                    ),
-                                                                    style: GoogleFonts
-                                                                        .nunito(
-                                                                      fontSize:
-                                                                          13,
-                                                                      letterSpacing:
-                                                                          0.125,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                      Padding(
-                                                        padding:
+                                                                horizontal: 8),
+                                                        tilePadding:
                                                             const EdgeInsets
                                                                     .symmetric(
-                                                                vertical: 8),
-                                                        child: DottedLine(
-                                                          lineThickness: 2,
-                                                          dashGapLength: 2,
-                                                          dashLength: 3,
-                                                          dashColor:
-                                                              dividerColor,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                bottom: 12),
-                                                        child: Row(
+                                                                horizontal: 8),
+                                                        title: Row(
                                                           children: [
-                                                            const Expanded(
-                                                              flex: 4,
-                                                              child: Center(),
-                                                            ),
-                                                            const Expanded(
-                                                              flex: 2,
-                                                              child: Center(),
-                                                            ),
                                                             Expanded(
-                                                              flex: 2,
+                                                              flex: 5,
                                                               child: Text(
-                                                                "Total :",
+                                                                // pembukuanTransaksi[
+                                                                //         index]
+                                                                //     .idTransaksi,
+                                                                snapData[1]
+                                                                        [index][
+                                                                    'id_pembukuan_transaksi'],
                                                                 style:
                                                                     GoogleFonts
                                                                         .nunito(
@@ -964,16 +1131,40 @@ class _PembukuanPageState extends State<PembukuanPage>
                                                               ),
                                                             ),
                                                             Expanded(
-                                                              flex: 2,
+                                                              flex: 5,
+                                                              child: Text(
+                                                                // pembukuanTransaksi[
+                                                                //         index]
+                                                                //     .tanggalTransaksig,
+                                                                snapData[1]
+                                                                        [index][
+                                                                    'tanggal_pelunasan'],
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .nunito(
+                                                                  fontSize: 13,
+                                                                  letterSpacing:
+                                                                      0.125,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 5,
                                                               child: Text(
                                                                 NumberFormat.simpleCurrency(
                                                                         locale:
                                                                             'id-ID',
                                                                         name:
-                                                                            "")
+                                                                            "Rp. ")
                                                                     .format(
                                                                   double.parse(
-                                                                    "50000",
+                                                                    // pembukuanTransaksi[
+                                                                    //         index]
+                                                                    //     .totalTransaksi,
+                                                                    snapData[1][index]
+                                                                            [
+                                                                            'total_harga_penjualan']
+                                                                        .toString(),
                                                                   ),
                                                                 ),
                                                                 style:
@@ -987,19 +1178,269 @@ class _PembukuanPageState extends State<PembukuanPage>
                                                             ),
                                                           ],
                                                         ),
+                                                        children: [
+                                                          Column(
+                                                            children: [
+                                                              Divider(
+                                                                color:
+                                                                    dividerColor,
+                                                                thickness: 2,
+                                                                height: 2,
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            16),
+                                                                child: Row(
+                                                                  children: [
+                                                                    Expanded(
+                                                                      flex: 3,
+                                                                      child:
+                                                                          Text(
+                                                                        "Nama Barang",
+                                                                        style: GoogleFonts
+                                                                            .nunito(
+                                                                          fontSize:
+                                                                              13,
+                                                                          letterSpacing:
+                                                                              0.125,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 2,
+                                                                      child:
+                                                                          Text(
+                                                                        "Jumlah",
+                                                                        style: GoogleFonts
+                                                                            .nunito(
+                                                                          fontSize:
+                                                                              13,
+                                                                          letterSpacing:
+                                                                              0.125,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    // Expanded(
+                                                                    //   flex: 2,
+                                                                    //   child:
+                                                                    //       Text(
+                                                                    //     "Harga",
+                                                                    //     style: GoogleFonts
+                                                                    //         .nunito(
+                                                                    //       fontSize:
+                                                                    //           13,
+                                                                    //       letterSpacing:
+                                                                    //           0.125,
+                                                                    //     ),
+                                                                    //   ),
+                                                                    // ),
+                                                                    Expanded(
+                                                                      flex: 2,
+                                                                      child:
+                                                                          Text(
+                                                                        "Sub Total",
+                                                                        style: GoogleFonts
+                                                                            .nunito(
+                                                                          fontSize:
+                                                                              13,
+                                                                          letterSpacing:
+                                                                              0.125,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    vertical:
+                                                                        8),
+                                                                child:
+                                                                    DottedLine(
+                                                                  lineThickness:
+                                                                      2,
+                                                                  dashGapLength:
+                                                                      2,
+                                                                  dashLength: 3,
+                                                                  dashColor:
+                                                                      dividerColor,
+                                                                ),
+                                                              ),
+                                                              ListView.builder(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                scrollDirection:
+                                                                    Axis.vertical,
+                                                                physics:
+                                                                    const NeverScrollableScrollPhysics(),
+                                                                itemCount: snapData[1]
+                                                                            [
+                                                                            index]
+                                                                        [
+                                                                        'kode_stock']
+                                                                    .length,
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        index) {
+                                                                  return SizedBox(
+                                                                    width:
+                                                                        deviceWidth,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              3,
+                                                                          child:
+                                                                              Text(
+                                                                            // displayTransaksi[index].namaBarang,
+                                                                            snapData[1][index]['nama_barang'][index],
+                                                                            style:
+                                                                                GoogleFonts.nunito(
+                                                                              fontSize: 13,
+                                                                              letterSpacing: 0.125,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              Text(
+                                                                            // displayTransaksi[index].jumlahBarang,
+                                                                            snapData[1][index]['jumlah_barang'][index].toString(),
+                                                                            style:
+                                                                                GoogleFonts.nunito(
+                                                                              fontSize: 13,
+                                                                              letterSpacing: 0.125,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        // Expanded(
+                                                                        //   flex:
+                                                                        //       2,
+                                                                        //   child:
+                                                                        //       Text(
+                                                                        //     displayTransaksi[index].hargaBarang,
+                                                                        //     style:
+                                                                        //         GoogleFonts.nunito(
+                                                                        //       fontSize: 13,
+                                                                        //       letterSpacing: 0.125,
+                                                                        //     ),
+                                                                        //   ),
+                                                                        // ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              Text(
+                                                                            NumberFormat.simpleCurrency(locale: 'id-ID', name: "").format(
+                                                                              double.parse(
+                                                                                snapData[1][index]['harga_barang'][index].toString(),
+                                                                              ),
+                                                                            ),
+                                                                            style:
+                                                                                GoogleFonts.nunito(
+                                                                              fontSize: 13,
+                                                                              letterSpacing: 0.125,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    vertical:
+                                                                        8),
+                                                                child:
+                                                                    DottedLine(
+                                                                  lineThickness:
+                                                                      2,
+                                                                  dashGapLength:
+                                                                      2,
+                                                                  dashLength: 3,
+                                                                  dashColor:
+                                                                      dividerColor,
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        bottom:
+                                                                            12),
+                                                                child: Row(
+                                                                  children: [
+                                                                    const Expanded(
+                                                                      flex: 3,
+                                                                      child:
+                                                                          Center(),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 2,
+                                                                      child:
+                                                                          Text(
+                                                                        "Total :",
+                                                                        style: GoogleFonts
+                                                                            .nunito(
+                                                                          fontSize:
+                                                                              13,
+                                                                          letterSpacing:
+                                                                              0.125,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 2,
+                                                                      child:
+                                                                          Text(
+                                                                        NumberFormat.simpleCurrency(
+                                                                                locale: 'id-ID',
+                                                                                name: "")
+                                                                            .format(
+                                                                          double
+                                                                              .parse(
+                                                                            snapData[1][index]['total_harga_penjualan'].toString(),
+                                                                          ),
+                                                                        ),
+                                                                        style: GoogleFonts
+                                                                            .nunito(
+                                                                          fontSize:
+                                                                              13,
+                                                                          letterSpacing:
+                                                                              0.125,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        ],
                                                       ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  } else if (snapData[0] == 404) {
+                                    return Center();
+                                  }
+                                }
+                                return Center();
+                              },
                             ),
                           ),
                         ],

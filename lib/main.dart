@@ -6,9 +6,11 @@ import 'package:aplikasi_pos/pages/home/home.dart';
 import 'package:aplikasi_pos/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,9 +34,9 @@ void main() async {
           defaultScale: true,
           breakpoints: const [
             ResponsiveBreakpoint.resize(480, name: MOBILE),
-            ResponsiveBreakpoint.autoScale(800, name: TABLET),
+            ResponsiveBreakpoint.autoScale(800, name: TABLET, scaleFactor: 0.9),
             ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-            ResponsiveBreakpoint.autoScale(2460, name: "4K")
+            ResponsiveBreakpoint.autoScale(2460, name: "4K", scaleFactor: 0.9)
           ],
           background: Container(
             color: const Color(0xFFF5F5F5),
@@ -150,6 +152,11 @@ void main() async {
           ),
         ),
         home: const MyApp(),
+        localizationsDelegates: const [
+          GlobalWidgetsLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          MonthYearPickerLocalizations.delegate,
+        ],
       ),
     ),
   );

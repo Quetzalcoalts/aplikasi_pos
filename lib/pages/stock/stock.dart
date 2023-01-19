@@ -1,5 +1,6 @@
 //ignore_for_file: todo
-import 'package:aplikasi_pos/services/class/dataclass.dart';
+import 'package:aplikasi_pos/pages/stock/dataclass.dart';
+import 'package:aplikasi_pos/class/dataclass.dart';
 import 'package:aplikasi_pos/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
