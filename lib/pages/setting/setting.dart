@@ -1,7 +1,10 @@
+// ignore_for_file: todo
 import 'dart:ui';
 
 import 'package:aplikasi_pos/pages/setting/services.dart';
+import 'package:aplikasi_pos/pages/stock/services.dart';
 import 'package:aplikasi_pos/themes/colors.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -118,21 +121,23 @@ class _SettingPageState extends State<SettingPage> {
     final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-            title: Text(
-              "Profil",
-              style: GoogleFonts.inter(
-                color: darkText,
-              ),
+          title: Text(
+            "Profil",
+            style: GoogleFonts.inter(
+              color: darkText,
             ),
-            centerTitle: true,
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back_ios_outlined,
-                  color: darkText,
-                ))),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_outlined,
+              color: darkText,
+            ),
+          ),
+        ),
         body: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(
               dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse}),
@@ -143,7 +148,7 @@ class _SettingPageState extends State<SettingPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(15, 40, 15, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 40, 15, 10),
                   child: Column(
                     children: [
                       Center(
@@ -192,7 +197,14 @@ class _SettingPageState extends State<SettingPage> {
                   child: Column(
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ReturPage(),
+                            ),
+                          );
+                        },
                         child: Row(
                           children: [
                             Container(
@@ -225,9 +237,11 @@ class _SettingPageState extends State<SettingPage> {
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile()));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditProfile(),
+                            ),
+                          );
                         },
                         child: Row(
                           children: [
@@ -261,9 +275,49 @@ class _SettingPageState extends State<SettingPage> {
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SupplierPage()));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const TutupPembukuanPage(),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffD9D9D9),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: const Image(
+                                image: AssetImage(
+                                  'lib/assets/images/tutupBuku.png',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 25),
+                            Text(
+                              "Tutup Pembukuan",
+                              style: GoogleFonts.inter(
+                                color: darkText,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SupplierPage(),
+                            ),
+                          );
                         },
                         child: Row(
                           children: [
@@ -564,7 +618,7 @@ class _EditProfileState extends State<EditProfile> {
             physics: const ClampingScrollPhysics(),
             controller: ScrollController(),
             child: Container(
-                padding: EdgeInsets.fromLTRB(20, 35, 20, 10),
+                padding: const EdgeInsets.fromLTRB(20, 35, 20, 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1158,7 +1212,7 @@ class _SupplierPageState extends State<SupplierPage> {
         child: const Icon(Icons.add),
       ),
       body: Container(
-        padding: EdgeInsets.fromLTRB(20, 35, 20, 10),
+        padding: const EdgeInsets.fromLTRB(20, 35, 20, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1404,7 +1458,7 @@ class _SupplierPageState extends State<SupplierPage> {
                                                   ['nama_supplier']);
                                           setState(() {});
                                         },
-                                        icon: Icon(Icons.delete),
+                                        icon: const Icon(Icons.delete),
                                       ),
                                     ),
                                   )
@@ -1419,6 +1473,1055 @@ class _SupplierPageState extends State<SupplierPage> {
                 }
 
                 return Column();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TutupPembukuanPage extends StatefulWidget {
+  const TutupPembukuanPage({super.key});
+
+  @override
+  State<TutupPembukuanPage> createState() => _TutupPembukuanPageState();
+}
+
+class _TutupPembukuanPageState extends State<TutupPembukuanPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: AppBar(
+          title: Text(
+            "Penutupan Buku",
+            style: GoogleFonts.inter(
+              color: darkText,
+            ),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios_outlined,
+                color: darkText,
+              ))),
+      body: Container(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "ID : A001",
+                  style: GoogleFonts.inter(
+                      fontSize: 16,
+                      letterSpacing: 0.125,
+                      fontWeight: FontWeight.w700,
+                      color: darkText),
+                ),
+                Text(
+                  "08/09/2022",
+                  style: GoogleFonts.inter(
+                      fontSize: 16,
+                      letterSpacing: 0.125,
+                      fontWeight: FontWeight.w700,
+                      color: darkText),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Material(
+              borderRadius: BorderRadius.circular(5),
+              elevation: 15,
+              shadowColor: Colors.black87,
+              color: buttonColor,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "ID",
+                        style: GoogleFonts.nunito(
+                          fontSize: 13,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        "Nama Barang",
+                        style: GoogleFonts.nunito(
+                          fontSize: 13,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "Jumlah",
+                        style: GoogleFonts.nunito(
+                          fontSize: 13,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "Harga",
+                        style: GoogleFonts.nunito(
+                          fontSize: 13,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "Sub Total",
+                        style: GoogleFonts.nunito(
+                          fontSize: 13,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              controller: ScrollController(),
+              physics: const ClampingScrollPhysics(),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side: const BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  color: lightText,
+                  //masih ada masalah di title card
+                  child: ListTile(
+                      title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "A001",
+                          style: GoogleFonts.inter(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w500,
+                              color: darkText),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          "Twisko",
+                          style: GoogleFonts.inter(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w500,
+                              color: darkText),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "10",
+                          style: GoogleFonts.inter(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w500,
+                              color: darkText),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "10.000",
+                          style: GoogleFonts.inter(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w500,
+                              color: darkText),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "100.000",
+                          style: GoogleFonts.inter(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w500,
+                              color: darkText),
+                        ),
+                      ),
+                    ],
+                  )),
+                );
+              },
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(
+                  color: Colors.transparent,
+                ),
+              ),
+              color: lightText,
+              //masih ada masalah di title card
+              child: ListTile(
+                  title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      "100.000",
+                      style: GoogleFonts.inter(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w500,
+                          color: lightText),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 15),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "Sub Total : ",
+                        style: GoogleFonts.inter(
+                            fontSize: 12,
+                            letterSpacing: 0.125,
+                            fontWeight: FontWeight.w500,
+                            color: darkText),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      "50",
+                      style: GoogleFonts.inter(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w500,
+                          color: darkText),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      "Total : ",
+                      style: GoogleFonts.inter(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w500,
+                          color: darkText),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      "500.000",
+                      style: GoogleFonts.inter(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w500,
+                          color: darkText),
+                    ),
+                  ),
+                ],
+              )),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      backgroundColor: buttonColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      "Submit",
+                      style: GoogleFonts.inter(
+                        color: lightText,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ReturPage extends StatefulWidget {
+  const ReturPage({super.key});
+
+  @override
+  State<ReturPage> createState() => _ReturPageState();
+}
+
+class _ReturPageState extends State<ReturPage> {
+  ServicesSetting sertivesSetting = ServicesSetting();
+  ServicesStock servicesStock = ServicesStock();
+  late Future _listRetur;
+  final List<String> _supplierList = List.empty(growable: true);
+  final List<String> _inventoryList = List.empty(growable: true);
+
+  String _valKodeSup = '';
+  String _valNamaSup = '';
+
+  String _valKodeBarang = '';
+  String _valNamaBarang = '';
+
+  final _ctrlJumlahRetur = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _listRetur = sertivesSetting.getRetur();
+    getSupplierList();
+    getInventoryList();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _ctrlJumlahRetur.dispose();
+  }
+
+  Future getSupplierList() async {
+    var response = await servicesStock.getSupplier();
+    if (response[0] != 404) {
+      for (var val in response[1]) {
+        _supplierList.add("${val['kode_supplier']} ~ ${val['nama_supplier']}");
+        print(_supplierList);
+      }
+    } else {
+      debugPrint("Gagal");
+    }
+    print(_supplierList);
+  }
+
+  Future getInventoryList() async {
+    var response = await servicesStock.getStock();
+    if (response[0] != 404) {
+      for (var val in response[1]) {
+        _inventoryList.add("${val['kode_inventory']} ~ ${val['nama_barang']}");
+        print(_inventoryList);
+      }
+    } else {
+      debugPrint("Gagal");
+    }
+    print(_inventoryList);
+  }
+
+  Future postRetur(idSup, namaSup, kodeStock, nama, jumlah, context) async {
+    var response = await sertivesSetting.postRetur(
+        idSup, namaSup, kodeStock, nama, jumlah);
+    if (response[0] != 404) {
+      return true;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Barang Gagal Ditambahkan"),
+        ),
+      );
+    }
+  }
+
+  _splitStringSup(val) {
+    var value = val.toString();
+    var split = value.indexOf("~");
+    var temp1 = value.substring(0, split - 1);
+    var temp2 = value.substring(split + 2, val.length);
+    return [temp1, temp2];
+  }
+
+  _showTambahRetur(dw, dh) {
+    _valKodeBarang = "";
+    _valNamaBarang = "";
+    _valKodeSup = "";
+    _valNamaSup = "";
+    _ctrlJumlahRetur.clear();
+    showDialog(
+      barrierDismissible: false,
+      useRootNavigator: true,
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
+                ),
+                child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  controller: ScrollController(),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            "Tambah Retur",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const Divider(
+                          thickness: 1,
+                          height: 20,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Pilih Supplier",
+                                style: GoogleFonts.inter(
+                                  color: buttonColor,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                child: Card(
+                                  color: const Color(0xffE5E5E5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: const BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
+                                  child: DropdownSearch<String>(
+                                    dropdownDecoratorProps:
+                                        DropDownDecoratorProps(
+                                            textAlign: TextAlign.left,
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              filled: true,
+                                              fillColor:
+                                                  const Color(0xffE5E5E5),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 10),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                            )),
+                                    popupProps: const PopupProps.menu(
+                                      fit: FlexFit.loose,
+                                      showSelectedItems: false,
+                                      menuProps: MenuProps(
+                                        backgroundColor: Color(0xffE5E5E5),
+                                      ),
+                                    ),
+                                    items: _supplierList,
+                                    onChanged: (val) {
+                                      _valKodeSup = _splitStringSup(val)[0];
+                                      _valNamaSup = _splitStringSup(val)[1];
+                                      print(_valKodeSup);
+                                      print(_valNamaSup);
+                                    },
+                                    selectedItem: "Pilih Supplier",
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Pilih Inventory",
+                                style: GoogleFonts.inter(
+                                  color: buttonColor,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                child: Card(
+                                  color: const Color(0xffE5E5E5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: const BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
+                                  child: DropdownSearch<String>(
+                                    dropdownDecoratorProps:
+                                        DropDownDecoratorProps(
+                                            textAlign: TextAlign.left,
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              filled: true,
+                                              fillColor:
+                                                  const Color(0xffE5E5E5),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 10),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                            )),
+                                    popupProps: const PopupProps.menu(
+                                      fit: FlexFit.loose,
+                                      showSelectedItems: false,
+                                      menuProps: MenuProps(
+                                        backgroundColor: Color(0xffE5E5E5),
+                                      ),
+                                    ),
+                                    items: _inventoryList,
+                                    onChanged: (val) {
+                                      _valKodeBarang = _splitStringSup(val)[0];
+                                      _valNamaBarang = _splitStringSup(val)[1];
+                                      print(_valKodeBarang);
+                                      print(_valNamaBarang);
+                                    },
+                                    selectedItem: "Pilih Inventory",
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Jumlah",
+                                style: GoogleFonts.inter(
+                                  color: buttonColor,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              TextField(
+                                controller: _ctrlJumlahRetur,
+                                showCursor: false,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
+                                ),
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xffE5E5E5),
+                                  hintText: 'Input Jumlah Retur',
+                                  hintStyle: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13,
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 10),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Divider(
+                          thickness: 1,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "Cancel",
+                                  style: GoogleFonts.inter(
+                                    color: darkText,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 17,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                                height: 50,
+                                child: VerticalDivider(thickness: 1)),
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {
+                                  postRetur(
+                                          _valKodeSup,
+                                          _valNamaSup,
+                                          _valKodeBarang,
+                                          _valNamaBarang,
+                                          _ctrlJumlahRetur.text,
+                                          context)
+                                      .then(
+                                    (value) => Navigator.pop(context),
+                                  );
+                                },
+                                child: Text(
+                                  "Ok",
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 17,
+                                    color: darkText,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Retur",
+          style: GoogleFonts.inter(
+            color: darkText,
+          ),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_outlined,
+            color: darkText,
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showTambahRetur(deviceWidth, deviceHeight);
+        },
+        backgroundColor: buttonColor,
+        child: const Icon(Icons.add),
+      ),
+      body: Container(
+        padding: const EdgeInsets.fromLTRB(20, 35, 20, 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Material(
+              borderRadius: BorderRadius.circular(10),
+              elevation: 15,
+              shadowColor: Colors.black87,
+              child: TextField(
+                //controller: _controllerSearch,
+                showCursor: false,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: primaryColor,
+                  hintText: 'Cari Supplier',
+                  labelStyle: TextStyle(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search_rounded,
+                    color: secondaryColorVariant,
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.filter_alt_outlined),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Material(
+              borderRadius: BorderRadius.circular(5),
+              elevation: 15,
+              shadowColor: Colors.black87,
+              color: buttonColor,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "ID",
+                        style: GoogleFonts.nunito(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "Tanggal",
+                        style: GoogleFonts.nunito(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "Barang",
+                        style: GoogleFonts.nunito(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "Return",
+                        style: GoogleFonts.nunito(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "Jumlah",
+                        style: GoogleFonts.nunito(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "Ket",
+                        style: GoogleFonts.nunito(
+                          fontSize: 12,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "a",
+                        style: GoogleFonts.nunito(
+                          fontSize: 15,
+                          letterSpacing: 0.125,
+                          fontWeight: FontWeight.w700,
+                          color: buttonColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            FutureBuilder(
+              future: _listRetur,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List snapData = snapshot.data! as List;
+                  if (snapData[0] != 404) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      controller: ScrollController(),
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: snapData[1].length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          color: lightText,
+                          //masih ada masalah di title card
+                          child: ListTile(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    snapData[1][index]['id_retur'],
+                                    style: GoogleFonts.inter(
+                                        fontSize: 10,
+                                        letterSpacing: 0.125,
+                                        fontWeight: FontWeight.w500,
+                                        color: darkText),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    snapData[1][index]['tanggal_retur'],
+                                    style: GoogleFonts.inter(
+                                        fontSize: 10,
+                                        letterSpacing: 0.125,
+                                        fontWeight: FontWeight.w500,
+                                        color: darkText),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    snapData[1][index]['nama_barang'],
+                                    style: GoogleFonts.inter(
+                                        fontSize: 9,
+                                        letterSpacing: 0.125,
+                                        fontWeight: FontWeight.w500,
+                                        color: darkText),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    snapData[1][index]['status_retur'] == 0
+                                        ? "Barang"
+                                        : "Uang",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 10,
+                                        letterSpacing: 0.125,
+                                        fontWeight: FontWeight.w500,
+                                        color: darkText),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    snapData[1][index]['jumlah_barang']
+                                        .toString(),
+                                    style: GoogleFonts.inter(
+                                        fontSize: 10,
+                                        letterSpacing: 0.125,
+                                        fontWeight: FontWeight.w500,
+                                        color: darkText),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    "Ket",
+                                    // snapData[1][index]['keterangan_barang'],
+                                    style: GoogleFonts.inter(
+                                        fontSize: 10,
+                                        letterSpacing: 0.125,
+                                        fontWeight: FontWeight.w500,
+                                        color: darkText),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.edit),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapData[0] == 404) {
+                    return const Center();
+                  }
+                }
+                return const Center();
               },
             ),
           ],

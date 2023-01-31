@@ -40,7 +40,7 @@ dependencies:
   provider: ^6.0.4
   shared_preferences: ^2.0.15
   http: ^0.13.5
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.0
   responsive_framework: ^0.2.0
   animations: ^2.0.7
   dotted_border: ^2.0.0+3
@@ -52,6 +52,7 @@ dependencies:
   fdottedline_nullsafety: ^2.0.1
   flutter_typeahead: ^4.1.1
   textfield_search: ^0.10.0
+  flutter_speed_dial: ^6.2.0
 
 dev_dependencies:
   flutter_test:

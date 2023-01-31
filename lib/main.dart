@@ -61,78 +61,78 @@ void main() async {
           cardColor: scaffoldBackgroundColor,
           textTheme: GoogleFonts.interTextTheme(
             TextTheme(
-              headline1: GoogleFonts.nunito(
+              displayLarge: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.w700,
                 fontSize: 101,
                 letterSpacing: -0.15,
               ),
-              headline2: GoogleFonts.nunito(
+              displayMedium: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.w700,
                 fontSize: 63,
                 letterSpacing: -0.015,
               ),
-              headline3: GoogleFonts.nunito(
+              displaySmall: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.w700,
                 fontSize: 50,
                 letterSpacing: 0.0,
               ),
-              headline4: GoogleFonts.nunito(
+              headlineMedium: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.w700,
                 fontSize: 36,
                 letterSpacing: 0.025,
               ),
-              headline5: GoogleFonts.nunito(
+              headlineSmall: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.w700,
                 fontSize: 25,
                 letterSpacing: 0,
               ),
-              headline6: GoogleFonts.nunito(
+              titleLarge: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.w700,
                 fontSize: 21,
                 letterSpacing: 0.015,
               ),
-              subtitle1: GoogleFonts.nunito(
+              titleMedium: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.normal,
                 fontSize: 17,
                 letterSpacing: 0.015,
               ),
-              subtitle2: GoogleFonts.nunito(
+              titleSmall: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.w500,
                 fontSize: 15,
                 letterSpacing: 0.01,
               ),
-              bodyText1: GoogleFonts.nunito(
+              bodyLarge: GoogleFonts.nunito(
                 color: lightText,
                 fontWeight: FontWeight.normal,
                 fontSize: 17,
                 letterSpacing: 0.05,
               ),
-              bodyText2: GoogleFonts.nunito(
+              bodyMedium: GoogleFonts.nunito(
                   color: darkText,
                   fontWeight: FontWeight.normal,
                   fontSize: 15,
                   letterSpacing: 0.025),
-              button: GoogleFonts.nunito(
+              labelLarge: GoogleFonts.nunito(
                 color: primaryColorVariant,
                 fontWeight: FontWeight.w500,
                 fontSize: 14,
                 letterSpacing: 0.125,
               ),
-              caption: GoogleFonts.nunito(
+              bodySmall: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.normal,
                 fontSize: 12,
                 letterSpacing: 0.04,
               ),
-              overline: GoogleFonts.nunito(
+              labelSmall: GoogleFonts.nunito(
                 color: darkText,
                 fontWeight: FontWeight.normal,
                 fontSize: 10,

@@ -1,6 +1,7 @@
 //ignore_for_file: todo
 import 'package:aplikasi_pos/pages/pembukuan/pembukuan.dart';
 import 'package:aplikasi_pos/pages/penjualan/penjualan.dart';
+import 'package:aplikasi_pos/pages/setting/setting.dart';
 import 'package:aplikasi_pos/pages/stock/stock.dart';
 import 'package:aplikasi_pos/themes/colors.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,14 @@ class _HomePageState extends State<HomePage>
           centerTitle: true,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingPage(),
+                  ),
+                );
+              },
               icon: Icon(
                 Icons.settings,
                 color: darkText,

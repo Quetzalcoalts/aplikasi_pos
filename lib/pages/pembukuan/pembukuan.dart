@@ -1285,7 +1285,7 @@ class _PembukuanPageState extends State<PembukuanPage>
                                                                     .length,
                                                                 itemBuilder:
                                                                     (context,
-                                                                        index) {
+                                                                        idx) {
                                                                   return SizedBox(
                                                                     width:
                                                                         deviceWidth,
@@ -1297,7 +1297,7 @@ class _PembukuanPageState extends State<PembukuanPage>
                                                                           child:
                                                                               Text(
                                                                             // displayTransaksi[index].namaBarang,
-                                                                            snapData[1][index]['nama_barang'][index],
+                                                                            snapData[1][index]['nama_barang'][idx],
                                                                             style:
                                                                                 GoogleFonts.nunito(
                                                                               fontSize: 13,
@@ -1311,7 +1311,7 @@ class _PembukuanPageState extends State<PembukuanPage>
                                                                           child:
                                                                               Text(
                                                                             // displayTransaksi[index].jumlahBarang,
-                                                                            snapData[1][index]['jumlah_barang'][index].toString(),
+                                                                            snapData[1][index]['jumlah_barang'][idx].toString(),
                                                                             style:
                                                                                 GoogleFonts.nunito(
                                                                               fontSize: 13,
@@ -1339,7 +1339,7 @@ class _PembukuanPageState extends State<PembukuanPage>
                                                                               Text(
                                                                             NumberFormat.simpleCurrency(locale: 'id-ID', name: "").format(
                                                                               double.parse(
-                                                                                snapData[1][index]['harga_barang'][index].toString(),
+                                                                                snapData[1][index]['harga_barang'][idx].toString(),
                                                                               ),
                                                                             ),
                                                                             style:

@@ -48,4 +48,34 @@ class ServicesSetting {
       throw Exception("Gagal menghapus data");
     }
   }
+
+  //RETUR
+  Future getRetur() async {
+    final response = await http.get(
+      Uri.parse("${_linkPath}rtr/read-retur"),
+    );
+    if (response.statusCode == 200) {
+      var jsonRespStatus = json.decode(response.body)['status'];
+      var jsonRespData = json.decode(response.body)['data'];
+
+      return [jsonRespStatus, jsonRespData];
+    } else {
+      throw Exception("Gagal mengambil data");
+    }
+  }
+
+  Future postRetur(idSup, namaSup, kodeStock, nama, jumlah) async {
+    final response = await http.post(
+      Uri.parse(
+          "${_linkPath}rtr/input-retur?id_supplier=$idSup&nama_supplier=$namaSup&kode_stock=$kodeStock&nama_barang=$nama&jumlah_barang=$jumlah"),
+    );
+    if (response.statusCode == 200) {
+      var jsonRespStatus = json.decode(response.body)['status'];
+      var jsonRespMessage = json.decode(response.body)['message'];
+
+      return [jsonRespStatus, jsonRespMessage];
+    } else {
+      throw Exception("Gagal Mengirim data");
+    }
+  }
 }
