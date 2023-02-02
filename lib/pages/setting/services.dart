@@ -78,4 +78,48 @@ class ServicesSetting {
       throw Exception("Gagal Mengirim data");
     }
   }
+
+  Future getKodeBarang(idSup) async {
+    final response = await http.get(
+      Uri.parse("${_linkPath}rtr/read-kode-nama-barang?kode_supplier=$idSup"),
+    );
+    if (response.statusCode == 200) {
+      var jsonRespStatus = json.decode(response.body)['status'];
+      var jsonRespData = json.decode(response.body)['data'];
+
+      return [jsonRespStatus, jsonRespData];
+    } else {
+      throw Exception("Gagal mengambil data");
+    }
+  }
+
+  Future getMaxJumlahBarang(idSup, kodeStock) async {
+    final response = await http.get(
+      Uri.parse(
+          "${_linkPath}rtr/read-max-jumlah?kode_supplier=$idSup&kode_stock=$kodeStock"),
+    );
+    if (response.statusCode == 200) {
+      var jsonRespStatus = json.decode(response.body)['status'];
+      var jsonRespData = json.decode(response.body)['data'];
+
+      return [jsonRespStatus, jsonRespData];
+    } else {
+      throw Exception("Gagal mengambil data");
+    }
+  }
+
+  //TUTUP BUKU
+  Future tutupPembukuan(tanggal) async {
+    final response = await http.get(
+      Uri.parse("${_linkPath}pmb/penutupan-pembukuan?tanggal=$tanggal"),
+    );
+    if (response.statusCode == 200) {
+      var jsonRespStatus = json.decode(response.body)['status'];
+      var jsonRespData = json.decode(response.body)['data'];
+
+      return [jsonRespStatus, jsonRespData];
+    } else {
+      throw Exception("Gagal mengambil data");
+    }
+  }
 }

@@ -1896,14 +1896,21 @@ class _StockPageState extends State<StockPage>
                   _showTambahBarang(deviceWidth, deviceHeight);
                 }),
             SpeedDialChild(
-                child: Icon(Icons.add, color: buttonColor),
-                label: "Stock Masuk",
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TambahStokMasuk()));
-                })
+              child: Icon(Icons.add, color: buttonColor),
+              label: "Stock Masuk",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TambahStokMasuk(),
+                  ),
+                ).whenComplete(() {
+                  listStockMasuk = servicesStock
+                      .getStockIn()
+                      .whenComplete(() => setState(() {}));
+                });
+              },
+            )
           ],
         ),
       ),
@@ -2117,7 +2124,7 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                         print(_valKodeBarang);
                                         print(_valNamaBarang);
                                       },
-                                      selectedItem: "Pilih Supplier",
+                                      selectedItem: "Pilih Barang",
                                     ),
                                   ),
                                 ),
@@ -2401,24 +2408,38 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: TextButton(
                                   onPressed: () async {
-                                    int ctr = 0;
+                                    String tKode = "";
+                                    String tNama = "";
+                                    String tJumlah = "";
+                                    String tHarga = "";
+
                                     for (int i = 0;
                                         i < _listStockIn.length;
                                         i++) {
-                                      await postStockIn(
-                                              _valKodeSup,
-                                              _valNamaSup,
-                                              "|${_listStockIn[i][0]}|",
-                                              "|${_listStockIn[i][1]}|",
-                                              "|${_listStockIn[i][2]}|",
-                                              "|${_listStockIn[i][3]}|",
-                                              context)
-                                          .then((value) => ctr++);
+                                      tKode += "|${_listStockIn[i][0]}|";
+                                      tNama += "|${_listStockIn[i][1]}|";
+                                      tJumlah += "|${_listStockIn[i][2]}|";
+                                      tHarga += "|${_listStockIn[i][3]}|";
                                     }
-                                    if (ctr == _listStockIn.length) {
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    }
+                                    await postStockIn(
+                                            _valKodeSup,
+                                            _valNamaSup,
+                                            tKode,
+                                            tNama,
+                                            tJumlah,
+                                            tHarga,
+                                            context)
+                                        .then(
+                                      (value) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+
+                                    // debugPrint(tKode);
+                                    // debugPrint(tNama);
+                                    // debugPrint(tJumlah);
+                                    // debugPrint(tHarga);
                                   },
                                   child: Text(
                                     "Ok",

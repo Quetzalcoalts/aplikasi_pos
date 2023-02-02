@@ -58,22 +58,10 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SettingPage(),
-                  ),
-                );
-              },
-              icon: Icon(
-                Icons.settings,
-                color: darkText,
-              ),
-            ),
-          ],
+          iconTheme: IconThemeData(color: darkText),
+        ),
+        endDrawer: Drawer(
+          child: SettingPage(),
         ),
         body: Column(
           children: [

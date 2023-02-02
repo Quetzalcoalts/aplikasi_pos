@@ -2,20 +2,54 @@
 import 'dart:ui';
 
 import 'package:aplikasi_pos/pages/setting/services.dart';
-import 'package:aplikasi_pos/pages/stock/services.dart';
 import 'package:aplikasi_pos/themes/colors.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+  SettingPage({super.key});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
+  ServicesSetting servicesSetting = ServicesSetting();
+
+  DateTime _selectedDateFrom = DateTime.now();
+  String _formattedDateFrom = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _formattedDateFrom = DateFormat('dd-MM-yyyy').format(_selectedDateFrom);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  Future tutupBuku(tanggal, context) async {
+    var response = await servicesSetting.tutupPembukuan(tanggal);
+    if (response[0] != 404) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Buku Berhasi Ditutup"),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Gagal Menutup Buku"),
+        ),
+      );
+    }
+  }
+
   _showLogout(dw, dh) {
     showDialog(
       barrierDismissible: false,
@@ -120,273 +154,253 @@ class _SettingPageState extends State<SettingPage> {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Profil",
-            style: GoogleFonts.inter(
-              color: darkText,
-            ),
-          ),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_outlined,
-              color: darkText,
-            ),
-          ),
-        ),
         body: ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(
-              dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse}),
-          child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
-            controller: ScrollController(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(15, 40, 15, 10),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Container(
-                          width: 150,
-                          height: 150,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.amber),
+      behavior: ScrollConfiguration.of(context).copyWith(
+          dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse}),
+      child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        controller: ScrollController(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 40, 15, 10),
+              child: Column(
+                children: [
+                  Center(
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.amber),
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                  Center(
+                    child: Text(
+                      "Herry Kusmanto",
+                      style: GoogleFonts.inter(
+                        color: darkText,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 25,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "Version 1.0",
+                        style: GoogleFonts.inter(
+                          color: darkText,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 13,
                         ),
                       ),
-                      const SizedBox(height: 25),
-                      Center(
-                        child: Text(
-                          "Herry Kusmanto",
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(
+              thickness: 20,
+              color: Color(0xffF5F5F5),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 50),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ReturPage(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: const Image(
+                            image: AssetImage(
+                              'lib/assets/images/Paper.png',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 25),
+                        Text(
+                          "Retur",
                           style: GoogleFonts.inter(
                             color: darkText,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 25,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "Version 1.0",
-                            style: GoogleFonts.inter(
-                              color: darkText,
-                              fontWeight: FontWeight.w300,
-                              fontSize: 13,
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditProfile(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: const Image(
+                            image: AssetImage(
+                              'lib/assets/images/Profile.png',
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 25),
+                        Text(
+                          "Edit Profile",
+                          style: GoogleFonts.inter(
+                            color: darkText,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const Divider(
-                  thickness: 20,
-                  color: Color(0xffF5F5F5),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 30, 20, 50),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ReturPage(),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const TutupPembukuanPage(),
+                      //   ),
+                      // );
+
+                      tutupBuku(_formattedDateFrom, context)
+                          .whenComplete(() => Navigator.pop(context));
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: const Image(
+                            image: AssetImage(
+                              'lib/assets/images/tutupBuku.png',
                             ),
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffD9D9D9),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: const Image(
-                                image: AssetImage(
-                                  'lib/assets/images/Paper.png',
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 25),
-                            Text(
-                              "Retur",
-                              style: GoogleFonts.inter(
-                                color: darkText,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EditProfile(),
-                            ),
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffD9D9D9),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: const Image(
-                                image: AssetImage(
-                                  'lib/assets/images/Profile.png',
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 25),
-                            Text(
-                              "Edit Profile",
-                              style: GoogleFonts.inter(
-                                color: darkText,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(width: 25),
+                        Text(
+                          "Tutup Pembukuan",
+                          style: GoogleFonts.inter(
+                            color: darkText,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TutupPembukuanPage(),
-                            ),
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffD9D9D9),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: const Image(
-                                image: AssetImage(
-                                  'lib/assets/images/tutupBuku.png',
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 25),
-                            Text(
-                              "Tutup Pembukuan",
-                              style: GoogleFonts.inter(
-                                color: darkText,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SupplierPage(),
-                            ),
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffD9D9D9),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: const Image(
-                                image: AssetImage(
-                                  'lib/assets/images/3User.png',
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 25),
-                            Text(
-                              "Pilih Supplier",
-                              style: GoogleFonts.inter(
-                                color: darkText,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          _showLogout(deviceWidth, deviceHeight);
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffD9D9D9),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: const Image(
-                                image: AssetImage(
-                                  'lib/assets/images/Logout.png',
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 25),
-                            Text(
-                              "Logout",
-                              style: GoogleFonts.inter(
-                                color: darkText,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                )
-              ],
-            ),
-          ),
-        ));
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SupplierPage(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: const Image(
+                            image: AssetImage(
+                              'lib/assets/images/3User.png',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 25),
+                        Text(
+                          "Pilih Supplier",
+                          style: GoogleFonts.inter(
+                            color: darkText,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      _showLogout(deviceWidth, deviceHeight);
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: const Image(
+                            image: AssetImage(
+                              'lib/assets/images/Logout.png',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 25),
+                        Text(
+                          "Logout",
+                          style: GoogleFonts.inter(
+                            color: darkText,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }
 
@@ -1823,10 +1837,10 @@ class ReturPage extends StatefulWidget {
 
 class _ReturPageState extends State<ReturPage> {
   ServicesSetting sertivesSetting = ServicesSetting();
-  ServicesStock servicesStock = ServicesStock();
   late Future _listRetur;
   final List<String> _supplierList = List.empty(growable: true);
   final List<String> _inventoryList = List.empty(growable: true);
+  int maxItem = 0;
 
   String _valKodeSup = '';
   String _valNamaSup = '';
@@ -1842,7 +1856,6 @@ class _ReturPageState extends State<ReturPage> {
     super.initState();
     _listRetur = sertivesSetting.getRetur();
     getSupplierList();
-    getInventoryList();
   }
 
   @override
@@ -1853,29 +1866,44 @@ class _ReturPageState extends State<ReturPage> {
   }
 
   Future getSupplierList() async {
-    var response = await servicesStock.getSupplier();
+    _supplierList.clear();
+    var response = await sertivesSetting.getSupplier();
     if (response[0] != 404) {
       for (var val in response[1]) {
         _supplierList.add("${val['kode_supplier']} ~ ${val['nama_supplier']}");
-        print(_supplierList);
+        debugPrint(_supplierList.toString());
       }
     } else {
       debugPrint("Gagal");
     }
-    print(_supplierList);
+    debugPrint(_supplierList.toString());
   }
 
-  Future getInventoryList() async {
-    var response = await servicesStock.getStock();
+  Future getInventoryList(idSup) async {
+    _inventoryList.clear();
+    var response = await sertivesSetting.getKodeBarang(idSup);
     if (response[0] != 404) {
       for (var val in response[1]) {
-        _inventoryList.add("${val['kode_inventory']} ~ ${val['nama_barang']}");
-        print(_inventoryList);
+        _inventoryList.add("${val['kode_stock']} ~ ${val['nama_barang']}");
+        debugPrint(_inventoryList.toString());
       }
     } else {
       debugPrint("Gagal");
     }
-    print(_inventoryList);
+    debugPrint(_inventoryList.toString());
+  }
+
+  Future getMaxItem(idSup, kodeStock) async {
+    maxItem = 0;
+    var response = await sertivesSetting.getMaxJumlahBarang(idSup, kodeStock);
+    if (response[0] != 404) {
+      for (var val in response[1]) {
+        maxItem = val['max_barang'];
+      }
+    } else {
+      debugPrint("Gagal");
+    }
+    debugPrint(maxItem.toString());
   }
 
   Future postRetur(idSup, namaSup, kodeStock, nama, jumlah, context) async {
@@ -2015,8 +2043,10 @@ class _ReturPageState extends State<ReturPage> {
                                     onChanged: (val) {
                                       _valKodeSup = _splitStringSup(val)[0];
                                       _valNamaSup = _splitStringSup(val)[1];
-                                      print(_valKodeSup);
-                                      print(_valNamaSup);
+                                      getInventoryList(_valKodeSup)
+                                          .whenComplete(() => setState(() {}));
+                                      debugPrint(_valKodeSup);
+                                      debugPrint(_valNamaSup);
                                     },
                                     selectedItem: "Pilih Supplier",
                                   ),
@@ -2089,8 +2119,10 @@ class _ReturPageState extends State<ReturPage> {
                                     onChanged: (val) {
                                       _valKodeBarang = _splitStringSup(val)[0];
                                       _valNamaBarang = _splitStringSup(val)[1];
-                                      print(_valKodeBarang);
-                                      print(_valNamaBarang);
+                                      getMaxItem(_valKodeSup, _valKodeBarang)
+                                          .whenComplete(() => setState(() {}));
+                                      debugPrint(_valKodeBarang);
+                                      debugPrint(_valNamaBarang);
                                     },
                                     selectedItem: "Pilih Inventory",
                                   ),
@@ -2115,11 +2147,17 @@ class _ReturPageState extends State<ReturPage> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 13,
                                 ),
+                                onChanged: (val) {
+                                  debugPrint(val);
+                                  if (int.parse(val) > maxItem) {
+                                    _ctrlJumlahRetur.text = "$maxItem";
+                                  }
+                                },
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   filled: true,
                                   fillColor: const Color(0xffE5E5E5),
-                                  hintText: 'Input Jumlah Retur',
+                                  hintText: "Jumlah Max : $maxItem",
                                   hintStyle: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 13,
@@ -2161,6 +2199,7 @@ class _ReturPageState extends State<ReturPage> {
                             Expanded(
                               child: TextButton(
                                 onPressed: () {
+                                  _inventoryList.clear();
                                   Navigator.pop(context);
                                 },
                                 child: Text(
@@ -2214,7 +2253,8 @@ class _ReturPageState extends State<ReturPage> {
         );
       },
     ).whenComplete(() {
-      setState(() {});
+      _listRetur =
+          sertivesSetting.getRetur().whenComplete(() => setState(() {}));
     });
   }
 
@@ -2318,7 +2358,7 @@ class _ReturPageState extends State<ReturPage> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Expanded(
-                      flex: 2,
+                      flex: 4,
                       child: Text(
                         "ID",
                         style: GoogleFonts.nunito(
@@ -2366,7 +2406,7 @@ class _ReturPageState extends State<ReturPage> {
                       ),
                     ),
                     Expanded(
-                      flex: 4,
+                      flex: 3,
                       child: Text(
                         "Jumlah",
                         style: GoogleFonts.nunito(
@@ -2378,26 +2418,14 @@ class _ReturPageState extends State<ReturPage> {
                       ),
                     ),
                     Expanded(
-                      flex: 4,
+                      flex: 1,
                       child: Text(
-                        "Ket",
+                        "",
                         style: GoogleFonts.nunito(
                           fontSize: 12,
                           letterSpacing: 0.125,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        "a",
-                        style: GoogleFonts.nunito(
-                          fontSize: 15,
-                          letterSpacing: 0.125,
-                          fontWeight: FontWeight.w700,
-                          color: buttonColor,
                         ),
                       ),
                     ),
@@ -2432,7 +2460,7 @@ class _ReturPageState extends State<ReturPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  flex: 2,
+                                  flex: 4,
                                   child: Text(
                                     snapData[1][index]['id_retur'],
                                     style: GoogleFonts.inter(
@@ -2478,7 +2506,7 @@ class _ReturPageState extends State<ReturPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 4,
+                                  flex: 3,
                                   child: Text(
                                     snapData[1][index]['jumlah_barang']
                                         .toString(),
@@ -2490,27 +2518,17 @@ class _ReturPageState extends State<ReturPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 4,
-                                  child: Text(
-                                    "Ket",
-                                    // snapData[1][index]['keterangan_barang'],
-                                    style: GoogleFonts.inter(
-                                        fontSize: 10,
-                                        letterSpacing: 0.125,
-                                        fontWeight: FontWeight.w500,
-                                        color: darkText),
-                                  ),
-                                ),
-                                Expanded(
                                   flex: 1,
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.edit),
+                                  child: Text(
+                                    "",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 12,
+                                      letterSpacing: 0.125,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
