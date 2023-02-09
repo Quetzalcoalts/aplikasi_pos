@@ -151,7 +151,7 @@ void main() async {
             },
           ),
         ),
-        home: const MyApp(),
+        home: const AuthPage(),
         localizationsDelegates: const [
           GlobalWidgetsLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
