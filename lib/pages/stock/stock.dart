@@ -1058,9 +1058,9 @@ class _StockPageState extends State<StockPage>
                                                 value as RadioFilterUrutan;
                                             _satuanKirim = 0;
                                             if (mounted) {
-                                            debugPrint(value.name);
-                                            setState(() {});
-                                          }
+                                              debugPrint(value.name);
+                                              setState(() {});
+                                            }
                                           },
                                         ),
                                         Text(
@@ -1087,9 +1087,9 @@ class _StockPageState extends State<StockPage>
                                                 value as RadioFilterUrutan;
                                             _satuanKirim = 1;
                                             if (mounted) {
-                                            debugPrint(value.name);
-                                            setState(() {});
-                                          }
+                                              debugPrint(value.name);
+                                              setState(() {});
+                                            }
                                           },
                                         ),
                                         Text(
@@ -1234,7 +1234,7 @@ class _StockPageState extends State<StockPage>
                             Expanded(
                               child: TextButton(
                                 onPressed: () {
-                                  _satuanKirim = 2;
+                                  _satuanKirim = 0;
                                   _TanggalKirim = "";
                                   _dateKirim = "";
                                   _dateFrom = "";
@@ -1268,19 +1268,21 @@ class _StockPageState extends State<StockPage>
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: TextButton(
                                   onPressed: () {
-                                    listStockMasuk =
-                                        servicesStock.getFilterStockMasuk(
-                                            _dateKirim,
-                                            _satuanKirim,
-                                            _TanggalKirim).whenComplete(() => setState((){}));
-                                    Navigator.pop(context);
-                                    _satuanKirim = 2;
-                                    _TanggalKirim = "";
-                                    _dateKirim = "";
-                                    _dateFrom = "";
-                                    _dateBulan = "";
-                                    _dateTahun = "";
-                                    _filterTanggalCheck = false;
+                                    listStockMasuk = servicesStock
+                                        .getFilterStockMasuk(
+                                            _dateKirim.toString(),
+                                            _satuanKirim.toString(),
+                                            _TanggalKirim.toString())
+                                        .whenComplete(() {
+                                      _satuanKirim = 0;
+                                      _TanggalKirim = "";
+                                      _dateKirim = "";
+                                      _dateFrom = "";
+                                      _dateBulan = "";
+                                      _dateTahun = "";
+                                      _filterTanggalCheck = false;
+                                      Navigator.pop(context);
+                                    });
                                   },
                                   child: Text(
                                     "Ok",
