@@ -2358,7 +2358,7 @@ class _ReturPageState extends State<ReturPage> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Expanded(
-                      flex: 4,
+                      flex: 6,
                       child: Text(
                         "ID",
                         style: GoogleFonts.nunito(
@@ -2417,18 +2417,6 @@ class _ReturPageState extends State<ReturPage> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        "",
-                        style: GoogleFonts.nunito(
-                          fontSize: 12,
-                          letterSpacing: 0.125,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -2460,7 +2448,7 @@ class _ReturPageState extends State<ReturPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  flex: 4,
+                                  flex: 6,
                                   child: Text(
                                     snapData[1][index]['id_retur'],
                                     style: GoogleFonts.inter(
@@ -2515,18 +2503,6 @@ class _ReturPageState extends State<ReturPage> {
                                         letterSpacing: 0.125,
                                         fontWeight: FontWeight.w500,
                                         color: darkText),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "",
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 12,
-                                      letterSpacing: 0.125,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
                                   ),
                                 ),
                               ],

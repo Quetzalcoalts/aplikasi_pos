@@ -20,10 +20,24 @@ class ServicesStock {
     }
   }
 
-  Future postStock(nama, jumlah, harga) async {
+  Future getFilterStock(urutan) async {
+    final response = await http.get(
+      Uri.parse("${_linkPath}flt/fil-stock?tipe_urutan=$urutan"),
+    );
+    if (response.statusCode == 200) {
+      var jsonRespStatus = json.decode(response.body)['status'];
+      var jsonRespData = json.decode(response.body)['data'];
+
+      return [jsonRespStatus, jsonRespData];
+    } else {
+      throw Exception("Gagal mengambil data");
+    }
+  }
+
+  Future postStock(nama, jumlah, harga, satu) async {
     final response = await http.post(
       Uri.parse(
-          "${_linkPath}invent/input-stock?nama_barang=$nama&jumlah_barang=$jumlah&harga_barang=$harga"),
+          "${_linkPath}invent/input-stock?nama_barang=$nama&jumlah_barang=$jumlah&harga_barang=$harga&satuan_barang=$satu"),
     );
     if (response.statusCode == 200) {
       var jsonRespStatus = json.decode(response.body)['status'];
@@ -90,6 +104,21 @@ class ServicesStock {
       var jsonRespStatus = json.decode(response.body)['status'];
       var jsonRespData = json.decode(response.body)['data'];
 
+      return [jsonRespStatus, jsonRespData];
+    } else {
+      throw Exception("Gagal mengambil data");
+    }
+  }
+
+  //TODO: Get Filter 
+  Future getFilterStockMasuk(tanggal, tipeUrutan, tipeTanggal) async {
+    final response = await http.get(
+      Uri.parse(
+          "${_linkPath}flt/fil-stock-masuk?tanggal=$tanggal&tipe_urutan=$tipeUrutan&tipe_tanggal=$tipeTanggal"),
+    );
+    if (response.statusCode == 200) {
+      var jsonRespStatus = json.decode(response.body)['status'];
+      var jsonRespData = json.decode(response.body)['data'];
       return [jsonRespStatus, jsonRespData];
     } else {
       throw Exception("Gagal mengambil data");

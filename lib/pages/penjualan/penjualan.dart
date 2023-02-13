@@ -105,6 +105,19 @@ class _PenjualanPageState extends State<PenjualanPage>
     return temp;
   }
 
+  Future _updateStatusPenjualanSelesai(kode, tanggal, context) async {
+    var response = await servicesUser.updatePenjualan(kode, tanggal);
+    if (response[0] != 404) {
+      return true;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response[1]),
+        ),
+      );
+    }
+  }
+
   filterTanggalWidget(context, index, StateSetter setState) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -633,7 +646,7 @@ class _PenjualanPageState extends State<PenjualanPage>
                                         style: GoogleFonts.inter(
                                             fontSize: 13,
                                             color: darkText,
-                                            fontWeight: FontWeight.w400)),
+                                            fontWeight: FontWeight.w600)),
                                     children: [
                                       Container(
                                         child: ScrollConfiguration(
@@ -1025,38 +1038,49 @@ class _PenjualanPageState extends State<PenjualanPage>
                                                                             ),
                                                                           ),
                                                                           Visibility(
-                                                                              visible: snapData[1][index]['status_transaksi'] == "0" ? true : false,
-                                                                              child: Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                children: [
-                                                                                  ElevatedButton(
-                                                                                    style: TextButton.styleFrom(
-                                                                                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                                                                      primary: Colors.white,
-                                                                                      backgroundColor: Colors.grey,
-                                                                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomLeft: Radius.circular(20))),
-                                                                                    ),
-                                                                                    onPressed: () {},
-                                                                                    child: Icon(
+                                                                            visible: snapData[1][index]['status_transaksi'] == "0"
+                                                                                ? true
+                                                                                : false,
+                                                                            child:
+                                                                                Align(
+                                                                              alignment: Alignment.centerRight,
+                                                                              child: ElevatedButton(
+                                                                                style: TextButton.styleFrom(
+                                                                                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                                                                                  primary: Colors.white,
+                                                                                  backgroundColor: buttonColorabu,
+                                                                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  setState(() {
+                                                                                    _updateStatusPenjualanSelesai(snapData[1][index]['kode_transaksi'], DateTime.now(), context).whenComplete(() => setState(() {
+                                                                                      
+                                                                                    }));
+                                                                                  });
+                                                                                },
+                                                                                child: Wrap(
+                                                                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                                                                  children: [
+                                                                                    Icon(
                                                                                       Icons.add_circle_outline_rounded,
                                                                                       color: lightText,
                                                                                     ),
-                                                                                  ),
-                                                                                  ElevatedButton(
-                                                                                    style: TextButton.styleFrom(
-                                                                                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                                                                      primary: Colors.white,
-                                                                                      backgroundColor: Colors.grey,
-                                                                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
+                                                                                    const SizedBox(
+                                                                                      width: 5,
                                                                                     ),
-                                                                                    onPressed: () {},
-                                                                                    child: Icon(
-                                                                                      Icons.add_circle_outline_rounded,
-                                                                                      color: lightText,
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              )),
+                                                                                    Text(
+                                                                                      "Selesaikan",
+                                                                                      style: GoogleFonts.inter(
+                                                                                        color: lightText,
+                                                                                        fontWeight: FontWeight.w700,
+                                                                                        fontSize: 15,
+                                                                                      ),
+                                                                                    )
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
                                                                           Visibility(
                                                                             visible: snapData[1][index]['status_transaksi'] == "0"
                                                                                 ? false
@@ -1860,6 +1884,9 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
           centerTitle: true,
           leading: IconButton(
               onPressed: () {
+                cekTanggal = false;
+                dateBatasPending =
+                    DateFormat('dd-MM-yyyy').format(DateTime.now());
                 Navigator.pop(context);
               },
               icon: Icon(
@@ -1899,7 +1926,7 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                       ),
                       child: DropdownSearch<String>(
                         dropdownDecoratorProps: DropDownDecoratorProps(
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left,
                             dropdownSearchDecoration: InputDecoration(
                               filled: true,
                               fillColor: const Color(0xffE5E5E5),
