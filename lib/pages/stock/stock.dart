@@ -10,10 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
 int _selectedIndexChipsFilter = 0;
 int _filterTanggalIndex = 0;
 bool _filterTanggalCheck = false;
+
+String ikiSatuanCok = "";
+
+int _satuanKirim = 0;
+String _dateKirim = "";
+String _TanggalKirim = "";
 
 enum RadioFilterUrutan { Ascending, Descending }
 
@@ -37,6 +44,7 @@ class _StockPageState extends State<StockPage>
   final _controllerNamaBarangStock = TextEditingController();
   final _controllerJumlahBarangStock = TextEditingController();
   final _controllerHargaBarangStock = TextEditingController();
+  final _controllerSatuanBarangStock = TextEditingController();
 
   late Future listStock;
   late Future listStockMasuk;
@@ -48,6 +56,18 @@ class _StockPageState extends State<StockPage>
   DateTime _selectedDate = DateTime.now();
   String _formattedDate = "";
   String _date = "";
+
+  DateTime _selectedDateFrom = DateTime.now();
+  String _formattedDateFrom = "";
+  String _dateFrom = "";
+
+  DateTime _selectedDateBulan = DateTime.now();
+  String _formattedDateBulan = "";
+  String _dateBulan = "";
+
+  DateTime _selectedDateTahun = DateTime.now();
+  String _formattedDateTahun = "";
+  String _dateTahun = "";
 
   final isDialOpen = ValueNotifier(false);
 
@@ -76,6 +96,7 @@ class _StockPageState extends State<StockPage>
     _controllerNamaBarangStock.dispose();
     _controllerJumlahBarangStock.dispose();
     _controllerHargaBarangStock.dispose();
+    _controllerSatuanBarangStock.dispose();
     _controllerSearchBar.dispose();
   }
 
@@ -135,8 +156,8 @@ class _StockPageState extends State<StockPage>
     return inputInText.trim();
   }
 
-  Future postStockBarang(nama, jumlah, harga, context) async {
-    var response = await servicesStock.postStock(nama, jumlah, harga);
+  Future postStockBarang(nama, jumlah, harga, satuan, context) async {
+    var response = await servicesStock.postStock(nama, jumlah, harga, satuan);
     if (response[0] != 404) {
       return true;
     } else {
@@ -152,6 +173,7 @@ class _StockPageState extends State<StockPage>
     _controllerNamaBarangStock.clear();
     _controllerJumlahBarangStock.clear();
     _controllerHargaBarangStock.clear();
+    _controllerSatuanBarangStock.clear();
     showDialog(
       barrierDismissible: false,
       useRootNavigator: true,
@@ -246,52 +268,137 @@ class _StockPageState extends State<StockPage>
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Text(
-                                  "Jumlah",
-                                  style: GoogleFonts.inter(
-                                    color: buttonColor,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                TextField(
-                                  controller: _controllerJumlahBarangStock,
-                                  showCursor: false,
-                                  keyboardType: TextInputType.number,
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                  ),
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xffE5E5E5),
-                                    hintText: 'Input Jumlah',
-                                    hintStyle: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13,
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 0, horizontal: 10),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Jumlah",
+                                            style: GoogleFonts.inter(
+                                              color: buttonColor,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          TextField(
+                                            controller:
+                                                _controllerJumlahBarangStock,
+                                            showCursor: false,
+                                            keyboardType: TextInputType.number,
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 13,
+                                            ),
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor:
+                                                  const Color(0xffE5E5E5),
+                                              hintText: 'Input Jumlah',
+                                              hintStyle: GoogleFonts.inter(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 10),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
+                                    SizedBox(width: 15),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Satuan",
+                                            style: GoogleFonts.inter(
+                                              color: buttonColor,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          TextField(
+                                            controller:
+                                                _controllerSatuanBarangStock,
+                                            showCursor: false,
+                                            keyboardType: TextInputType.number,
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 13,
+                                            ),
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor:
+                                                  const Color(0xffE5E5E5),
+                                              hintText: 'Input Satuan',
+                                              hintStyle: GoogleFonts.inter(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 10),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.transparent,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
-                                  ),
+                                  ],
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -380,7 +487,12 @@ class _StockPageState extends State<StockPage>
                                           _controllerNamaBarangStock.text,
                                           _controllerJumlahBarangStock.text,
                                           _controllerHargaBarangStock.text,
+                                          "/${_controllerSatuanBarangStock.text}",
                                           context)
+                                      .whenComplete(() => setState(() {
+                                            listStock =
+                                                servicesStock.getStock();
+                                          }))
                                       .then((value) => Navigator.pop(context));
                                 },
                                 child: Text(
@@ -586,50 +698,286 @@ class _StockPageState extends State<StockPage>
     }
   }
 
-  filterTanggalWidget(context, index, StateSetter setState) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Pilih Tanggal",
-            style: GoogleFonts.nunito(
-                fontSize: 14,
-                letterSpacing: 0.125,
-                color: buttonColor,
-                fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          GestureDetector(
-            onTap: () {
-              selectFilterDate(context).then((value) => setState(() {}));
-            },
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: const Color(0xffE5E5E5),
+  void initialSelectedDate() {
+    _formattedDateFrom = DateFormat('dd-MM-yyyy').format(_selectedDateFrom);
+    _dateFrom = _formattedDateFrom;
+
+    _formattedDateBulan = DateFormat('MM-yyyy').format(_selectedDateBulan);
+    _dateBulan = _formattedDateBulan;
+
+    _formattedDateTahun = DateFormat('yyyy').format(_selectedDateTahun);
+    _dateTahun = _formattedDateTahun;
+  }
+
+  Future<void> selectFilterDateFrom(context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateFrom,
+      firstDate: DateTime(DateTime.now().year - 10, 1, 1),
+      lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+      builder: (context, child) {
+        return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: buttonColor, // header background color
+                onPrimary: lightText, // header text color
+                onSurface: darkText, // body text color
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(_date),
-                  const Icon(Icons.calendar_month),
-                ],
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: navButtonPrimary, // button text color
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+            child: child!);
+      },
     );
+    if (picked != null && picked != _selectedDateFrom) {
+      if (mounted) {
+        _selectedDateFrom = picked;
+        _formattedDateFrom = DateFormat('dd-MM-yyyy').format(_selectedDateFrom);
+        _dateFrom = _formattedDateFrom;
+        _dateKirim = _dateFrom;
+        setState(() {});
+      }
+    }
+  }
+
+  Future<void> selectFilterDateBulan(context) async {
+    final DateTime? picked = await showMonthYearPicker(
+      context: context,
+      initialDate: _selectedDateBulan,
+      firstDate: DateTime(DateTime.now().year - 10, 1, 1),
+      lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+      builder: (context, child) {
+        return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: buttonColor, // header background color
+                onPrimary: lightText, // header text color
+                onSurface: darkText, // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: navButtonPrimary, // button text color
+                ),
+              ),
+            ),
+            child: child!);
+      },
+    );
+    if (picked != null && picked != _selectedDateBulan) {
+      if (mounted) {
+        _selectedDateBulan = picked;
+        _formattedDateBulan = DateFormat('MM-yyyy').format(_selectedDateBulan);
+        _dateBulan = _formattedDateBulan;
+        _dateKirim = _dateBulan;
+        setState(() {});
+      }
+    }
+  }
+
+  Future selectFilterDateTahun(context, dw, dh) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Center(
+                child: Text(
+                  "SELECT YEAR",
+                  style: GoogleFonts.nunito(
+                      fontSize: 14,
+                      letterSpacing: 0.125,
+                      color: filterText,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              content: Container(
+                width: 300,
+                height: 300,
+                child: YearPicker(
+                  firstDate: DateTime(DateTime.now().year - 10, 1),
+                  lastDate: DateTime(DateTime.now().year + 10, 1),
+                  initialDate: DateTime.now(),
+                  currentDate: _selectedDateTahun,
+                  selectedDate: _selectedDateTahun,
+                  onChanged: (DateTime dateTime) {
+                    _selectedDateTahun = dateTime;
+                    print(_selectedDateTahun.year);
+                    setState(() {});
+                  },
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    _dateKirim = "";
+                    _dateTahun = "";
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "CANCEL",
+                    style: GoogleFonts.nunito(
+                        fontSize: 14,
+                        letterSpacing: 0.125,
+                        color: navButtonPrimary,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _dateTahun = "${_selectedDateTahun.year}";
+                    _dateKirim = _dateTahun;
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "OK",
+                    style: GoogleFonts.nunito(
+                        fontSize: 14,
+                        letterSpacing: 0.125,
+                        color: navButtonPrimary,
+                        fontWeight: FontWeight.w600),
+                  ),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  filterTanggalWidget(context, index, StateSetter setState, dw, dh) {
+    if (index == 0) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Pilih Tanggal",
+              style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  letterSpacing: 0.125,
+                  color: filterText,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                _TanggalKirim = "0";
+                selectFilterDateFrom(context).then((value) => setState(() {}));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: cardInfoColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_dateFrom),
+                    const Icon(Icons.calendar_month),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (index == 1) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Pilih Bulan",
+              style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  letterSpacing: 0.125,
+                  color: filterText,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                _TanggalKirim = "1";
+                selectFilterDateBulan(context).then((value) => setState(() {}));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: cardInfoColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_dateBulan),
+                    const Icon(Icons.calendar_month),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (index == 2) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Pilih Tahun",
+              style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  letterSpacing: 0.125,
+                  color: filterText,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                _TanggalKirim = "2";
+                selectFilterDateTahun(context, dw, dh)
+                    .whenComplete(() => setState(() {}));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: cardInfoColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_dateTahun),
+                    const Icon(Icons.calendar_month),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   //FUNGSI FILTERING STOK MASUK
   void filterStokMasuk(dw, dh) {
     RadioFilterUrutan? radioFilterUrutan;
+    RadioFilterTanggal? radioFilterTanggal;
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -653,18 +1001,20 @@ class _StockPageState extends State<StockPage>
                   child: SizedBox(
                     width: dw < 800 ? dw * 0.8 : dw * 0.4,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 10),
-                          child: Text(
-                            "Filter",
-                            style: GoogleFonts.nunito(
-                                fontSize: 23,
-                                letterSpacing: 0.125,
-                                color: darkText,
-                                fontWeight: FontWeight.w900),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 10),
+                            child: Text(
+                              "Filter",
+                              style: GoogleFonts.nunito(
+                                  fontSize: 23,
+                                  letterSpacing: 0.125,
+                                  color: darkText,
+                                  fontWeight: FontWeight.w900),
+                            ),
                           ),
                         ),
                         Divider(
@@ -706,6 +1056,11 @@ class _StockPageState extends State<StockPage>
                                           onChanged: (value) {
                                             radioFilterUrutan =
                                                 value as RadioFilterUrutan;
+                                            _satuanKirim = 0;
+                                            if (mounted) {
+                                            debugPrint(value.name);
+                                            setState(() {});
+                                          }
                                           },
                                         ),
                                         Text(
@@ -730,6 +1085,11 @@ class _StockPageState extends State<StockPage>
                                           onChanged: (value) {
                                             radioFilterUrutan =
                                                 value as RadioFilterUrutan;
+                                            _satuanKirim = 1;
+                                            if (mounted) {
+                                            debugPrint(value.name);
+                                            setState(() {});
+                                          }
                                           },
                                         ),
                                         Text(
@@ -770,11 +1130,17 @@ class _StockPageState extends State<StockPage>
                                       children: [
                                         Radio(
                                           value: RadioFilterTanggal.Harian,
-                                          groupValue: radioFilterUrutan,
+                                          groupValue: radioFilterTanggal,
                                           activeColor: buttonColor,
                                           onChanged: (value) {
-                                            radioFilterUrutan =
-                                                value as RadioFilterUrutan;
+                                            radioFilterTanggal =
+                                                value as RadioFilterTanggal;
+                                            _filterTanggalCheck = true;
+                                            _filterTanggalIndex = 0;
+                                            if (mounted) {
+                                              debugPrint(value.name);
+                                              setState(() {});
+                                            }
                                           },
                                         ),
                                         Text(
@@ -794,11 +1160,17 @@ class _StockPageState extends State<StockPage>
                                       children: [
                                         Radio(
                                           value: RadioFilterTanggal.Bulanan,
-                                          groupValue: radioFilterUrutan,
+                                          groupValue: radioFilterTanggal,
                                           activeColor: buttonColor,
                                           onChanged: (value) {
-                                            radioFilterUrutan =
-                                                value as RadioFilterUrutan;
+                                            radioFilterTanggal =
+                                                value as RadioFilterTanggal;
+                                            _filterTanggalCheck = true;
+                                            _filterTanggalIndex = 1;
+                                            if (mounted) {
+                                              debugPrint(value.name);
+                                              setState(() {});
+                                            }
                                           },
                                         ),
                                         Text(
@@ -818,11 +1190,17 @@ class _StockPageState extends State<StockPage>
                                       children: [
                                         Radio(
                                           value: RadioFilterTanggal.Tahunan,
-                                          groupValue: radioFilterUrutan,
+                                          groupValue: radioFilterTanggal,
                                           activeColor: buttonColor,
                                           onChanged: (value) {
-                                            radioFilterUrutan =
-                                                value as RadioFilterUrutan;
+                                            radioFilterTanggal =
+                                                value as RadioFilterTanggal;
+                                            _filterTanggalCheck = true;
+                                            _filterTanggalIndex = 2;
+                                            if (mounted) {
+                                              debugPrint(value.name);
+                                              setState(() {});
+                                            }
                                           },
                                         ),
                                         Text(
@@ -839,8 +1217,11 @@ class _StockPageState extends State<StockPage>
                                 ),
                               ),
                               const SizedBox(height: 18),
-                              filterTanggalWidget(
-                                  context, _filterTanggalIndex, setState),
+                              Visibility(
+                                visible: _filterTanggalCheck,
+                                child: filterTanggalWidget(context,
+                                    _filterTanggalIndex, setState, dw, dh),
+                              ),
                             ],
                           ),
                         ),
@@ -853,6 +1234,13 @@ class _StockPageState extends State<StockPage>
                             Expanded(
                               child: TextButton(
                                 onPressed: () {
+                                  _satuanKirim = 2;
+                                  _TanggalKirim = "";
+                                  _dateKirim = "";
+                                  _dateFrom = "";
+                                  _dateBulan = "";
+                                  _dateTahun = "";
+                                  _filterTanggalCheck = false;
                                   Navigator.pop(context);
                                 },
                                 child: Padding(
@@ -872,9 +1260,7 @@ class _StockPageState extends State<StockPage>
                             SizedBox(
                               height: 56,
                               child: VerticalDivider(
-                                width: 0.1,
-                                color: dividerColor,
-                              ),
+                                  width: 0.1, color: dividerColor),
                             ),
                             Expanded(
                               child: Padding(
@@ -882,7 +1268,19 @@ class _StockPageState extends State<StockPage>
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: TextButton(
                                   onPressed: () {
+                                    listStockMasuk =
+                                        servicesStock.getFilterStockMasuk(
+                                            _dateKirim,
+                                            _satuanKirim,
+                                            _TanggalKirim).whenComplete(() => setState((){}));
                                     Navigator.pop(context);
+                                    _satuanKirim = 2;
+                                    _TanggalKirim = "";
+                                    _dateKirim = "";
+                                    _dateFrom = "";
+                                    _dateBulan = "";
+                                    _dateTahun = "";
+                                    _filterTanggalCheck = false;
                                   },
                                   child: Text(
                                     "Ok",
@@ -934,9 +1332,14 @@ class _StockPageState extends State<StockPage>
             _selectedIndexChipsFilter = i;
 
             if (_selectedIndexChipsFilter == 0) {
-              filterAscending();
+              // filterAscending();
+              setState(() {
+                listStock = servicesStock.getFilterStock(0);
+              });
             } else if (_selectedIndexChipsFilter == 1) {
-              filterDescending();
+              setState(() {
+                listStock = servicesStock.getFilterStock(1);
+              });
             }
           });
         },
@@ -1110,7 +1513,7 @@ class _StockPageState extends State<StockPage>
                                         ),
                                       ),
                                       Expanded(
-                                        flex: 1,
+                                        flex: 2,
                                         child: Text(
                                           "Jumlah",
                                           style: GoogleFonts.nunito(
@@ -1215,14 +1618,18 @@ class _StockPageState extends State<StockPage>
                                                               ),
                                                             ),
                                                             Expanded(
-                                                              flex: 1,
+                                                              flex: 2,
                                                               child: Text(
                                                                 numberFormatDotSeparator(
-                                                                  snapData[1][
-                                                                          index]
-                                                                      [
-                                                                      'jumlah_barang'],
-                                                                ),
+                                                                      snapData[1][index]
+                                                                              [
+                                                                              'jumlah_barang']
+                                                                          .toString(),
+                                                                    ) +
+                                                                    snapData[1][
+                                                                            index]
+                                                                        [
+                                                                        'satuan_barang'],
                                                                 style:
                                                                     GoogleFonts
                                                                         .nunito(
@@ -1240,11 +1647,11 @@ class _StockPageState extends State<StockPage>
                                                                             'id-ID',
                                                                         name:
                                                                             "Rp. ")
-                                                                    .format(double.parse(snapData[1]
+                                                                    .format(snapData[1]
                                                                             [
                                                                             index]
                                                                         [
-                                                                        'harga_barang'])),
+                                                                        'harga_barang']),
                                                                 style:
                                                                     GoogleFonts
                                                                         .nunito(
@@ -1814,41 +2221,6 @@ class _StockPageState extends State<StockPage>
                                                             ],
                                                           ),
                                                         ),
-                                                        Align(
-                                                          alignment: Alignment
-                                                              .bottomRight,
-                                                          child: ElevatedButton(
-                                                            style: TextButton
-                                                                .styleFrom(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  vertical: 15,
-                                                                  horizontal:
-                                                                      15),
-                                                              primary:
-                                                                  Colors.white,
-                                                              backgroundColor:
-                                                                  Colors.grey,
-                                                              shape: const RoundedRectangleBorder(
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              20),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              20))),
-                                                            ),
-                                                            onPressed: () {
-                                                              _showDeleteStokMasuk(
-                                                                  deviceWidth,
-                                                                  deviceHeight);
-                                                            },
-                                                            child: Icon(
-                                                              Icons.delete,
-                                                              color: lightText,
-                                                            ),
-                                                          ),
-                                                        ),
                                                       ],
                                                     ),
                                                   ],
@@ -1988,6 +2360,22 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
     print(_supplierList);
   }
 
+  Future _getSatuan(kode) async {
+    var response = await servicesStock.getStock();
+    if (response[0] != 404) {
+      for (var element in response[1]) {
+        if (element['kode_inventory'] == kode.toString()) {
+          setState(() {
+            ikiSatuanCok = "${element['satuan_barang']}";
+          });
+          break;
+        }
+      }
+    } else {
+      throw "Gagal Mengambil Data";
+    }
+  }
+
   Future getInventoryList() async {
     var response = await servicesStock.getStock();
     if (response[0] != 404) {
@@ -2123,6 +2511,11 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                             _splitStringSup(val)[1];
                                         print(_valKodeBarang);
                                         print(_valNamaBarang);
+                                        setState(() {
+                                          _getSatuan(_valKodeBarang)
+                                              .whenComplete(
+                                                  () => setState(() {}));
+                                        });
                                       },
                                       selectedItem: "Pilih Barang",
                                     ),
@@ -2138,45 +2531,70 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                   ),
                                 ),
                                 const SizedBox(height: 5),
-                                TextField(
-                                  readOnly: false,
-                                  showCursor: false,
-                                  keyboardType: TextInputType.number,
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                  ),
-                                  controller: _ctrlJumlahBarang,
-                                  onChanged: (value) {},
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xffE5E5E5),
-                                    hintText: 'Input Jumlah Barang',
-                                    hintStyle: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13,
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 0, horizontal: 10),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 4,
+                                      child: TextField(
+                                        readOnly: false,
+                                        showCursor: false,
+                                        keyboardType: TextInputType.number,
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 13,
+                                        ),
+                                        controller: _ctrlJumlahBarang,
+                                        onChanged: (value) {},
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: const Color(0xffE5E5E5),
+                                          hintText: 'Input Jumlah Barang',
+                                          hintStyle: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 0, horizontal: 10),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: const BorderSide(
+                                              color: Colors.transparent,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: const BorderSide(
+                                              color: Colors.transparent,
+                                            ),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: const BorderSide(
+                                              color: Colors.transparent,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
-                                      ),
+                                    SizedBox(
+                                      width: 10,
                                     ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        ikiSatuanCok,
+                                        style: GoogleFonts.inter(
+                                          color: darkText,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                    )
+                                  ],
                                 ),
                                 const SizedBox(height: 15),
                                 Text(
@@ -2242,6 +2660,7 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                             Expanded(
                               child: TextButton(
                                 onPressed: () {
+                                  ikiSatuanCok = "";
                                   Navigator.pop(context);
                                 },
                                 child: Padding(
@@ -2283,6 +2702,7 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                         int.parse(_ctrlJumlahBarang.text);
                                     totalTemp[1] += total;
                                     _listStockIn.add(temp);
+                                    ikiSatuanCok = "";
                                     Navigator.pop(context);
                                   },
                                   child: Text(

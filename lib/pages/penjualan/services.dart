@@ -42,6 +42,21 @@ class ServicesPenjualan {
     }
   }
 
+  //update status penjualan
+  Future updatePenjualan(kode_tran, tanggal_pel) async {
+    final response = await http.put(
+      Uri.parse(
+          "${_linkPath}tr/update-status?kode_transaksi=$kode_tran&tanggal_peliunasan=$tanggal_pel"),
+    );
+    if (response.statusCode == 200) {
+      var jsonRespStatus = json.decode(response.body)['status'];
+      var jsonRespMessage = json.decode(response.body)['message'];
+      return [jsonRespStatus, jsonRespMessage];
+    } else {
+      throw Exception("Gagal memasukan data");
+    }
+  }
+
   //TODO: Get Filter
   Future getFilter(tanggal, tipestatus) async {
     final response = await http.get(
