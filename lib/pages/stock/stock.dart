@@ -1241,6 +1241,9 @@ class _StockPageState extends State<StockPage>
                                   _dateBulan = "";
                                   _dateTahun = "";
                                   _filterTanggalCheck = false;
+                                  _selectedDateFrom = DateTime.now();
+                                  _selectedDateBulan = DateTime.now();
+                                  _selectedDateTahun = DateTime.now();
                                   Navigator.pop(context);
                                 },
                                 child: Padding(
@@ -1281,6 +1284,9 @@ class _StockPageState extends State<StockPage>
                                       _dateBulan = "";
                                       _dateTahun = "";
                                       _filterTanggalCheck = false;
+                                      _selectedDateFrom = DateTime.now();
+                                      _selectedDateBulan = DateTime.now();
+                                      _selectedDateTahun = DateTime.now();
                                       Navigator.pop(context);
                                     });
                                   },
@@ -1757,7 +1763,21 @@ class _StockPageState extends State<StockPage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _satuanKirim = 0;
+                                _TanggalKirim = "";
+                                _dateKirim = "";
+                                _dateFrom = "";
+                                _dateBulan = "";
+                                _dateTahun = "";
+                                _filterTanggalCheck = false;
+                                _selectedDateFrom = DateTime.now();
+                                _selectedDateBulan = DateTime.now();
+                                _selectedDateTahun = DateTime.now();
+                                listStockMasuk = servicesStock
+                                    .getStockIn()
+                                    .whenComplete(() => setState(() {}));
+                              },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 18, horizontal: 18),
