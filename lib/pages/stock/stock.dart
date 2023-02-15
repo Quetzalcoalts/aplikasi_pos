@@ -354,7 +354,6 @@ class _StockPageState extends State<StockPage>
                                             controller:
                                                 _controllerSatuanBarangStock,
                                             showCursor: false,
-                                            keyboardType: TextInputType.number,
                                             style: GoogleFonts.inter(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 13,
