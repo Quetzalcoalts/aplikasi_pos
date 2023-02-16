@@ -230,7 +230,7 @@ class _StockPageState extends State<StockPage>
                                 const SizedBox(height: 10),
                                 TextField(
                                   controller: _controllerNamaBarangStock,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 13,
@@ -289,7 +289,7 @@ class _StockPageState extends State<StockPage>
                                           TextField(
                                             controller:
                                                 _controllerJumlahBarangStock,
-                                            showCursor: false,
+                                            cursorColor: Colors.lightBlueAccent,
                                             keyboardType: TextInputType.number,
                                             style: GoogleFonts.inter(
                                               fontWeight: FontWeight.w500,
@@ -353,7 +353,7 @@ class _StockPageState extends State<StockPage>
                                           TextField(
                                             controller:
                                                 _controllerSatuanBarangStock,
-                                            showCursor: false,
+                                            cursorColor: Colors.lightBlueAccent,
                                             style: GoogleFonts.inter(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 13,
@@ -414,7 +414,7 @@ class _StockPageState extends State<StockPage>
                                 TextField(
                                   controller: _controllerHargaBarangStock,
                                   keyboardType: TextInputType.number,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 13,
@@ -2558,7 +2558,7 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                       flex: 4,
                                       child: TextField(
                                         readOnly: false,
-                                        showCursor: false,
+                                        cursorColor: Colors.lightBlueAccent,
                                         keyboardType: TextInputType.number,
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w500,
@@ -2629,7 +2629,7 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                 const SizedBox(height: 5),
                                 TextField(
                                   readOnly: false,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   keyboardType: TextInputType.number,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
