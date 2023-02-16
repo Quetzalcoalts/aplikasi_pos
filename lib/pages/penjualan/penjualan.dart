@@ -529,70 +529,67 @@ class _PenjualanPageState extends State<PenjualanPage>
                   elevation: 15,
                   shadowColor: Colors.black87,
                   color: buttonColor,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
+                  child: ExpansionTile(
+                    maintainState: true,
+                    initiallyExpanded: false,
+                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                    expandedAlignment: Alignment.centerLeft,
+                    iconColor: buttonColor,
+                    collapsedIconColor: buttonColor,
+                    title: Column(
                       children: [
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            "ID",
-                            style: GoogleFonts.nunito(
-                              fontSize: 15,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                "ID",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  letterSpacing: 0.125,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            "Tanggal",
-                            style: GoogleFonts.nunito(
-                              fontSize: 15,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                "Tanggal",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  letterSpacing: 0.125,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            "Tgl Lunas",
-                            style: GoogleFonts.nunito(
-                              fontSize: 15,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                "Tgl Lunas",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  letterSpacing: 0.125,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Status",
-                            style: GoogleFonts.nunito(
-                              fontSize: 15,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "Status",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  letterSpacing: 0.125,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "a",
-                            style: GoogleFonts.nunito(
-                              fontSize: 10,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: buttonColor,
-                            ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -809,11 +806,9 @@ class _PenjualanPageState extends State<PenjualanPage>
                                                                                   ),
                                                                                   Expanded(
                                                                                     flex: 2,
-                                                                                    child: Center(
-                                                                                      child: Text(
-                                                                                        namaStatus,
-                                                                                        style: GoogleFonts.inter(fontSize: 10, color: Color(int.parse(warnaStatus)), fontWeight: FontWeight.w600),
-                                                                                      ),
+                                                                                    child: Text(
+                                                                                      namaStatus,
+                                                                                      style: GoogleFonts.inter(fontSize: 10, color: Color(int.parse(warnaStatus)), fontWeight: FontWeight.w600),
                                                                                     ),
                                                                                   ),
                                                                                 ],
