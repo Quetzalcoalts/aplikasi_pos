@@ -230,7 +230,7 @@ class _StockPageState extends State<StockPage>
                                 const SizedBox(height: 10),
                                 TextField(
                                   controller: _controllerNamaBarangStock,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 13,
@@ -289,7 +289,7 @@ class _StockPageState extends State<StockPage>
                                           TextField(
                                             controller:
                                                 _controllerJumlahBarangStock,
-                                            showCursor: false,
+                                            cursorColor: Colors.lightBlueAccent,
                                             keyboardType: TextInputType.number,
                                             style: GoogleFonts.inter(
                                               fontWeight: FontWeight.w500,
@@ -353,8 +353,7 @@ class _StockPageState extends State<StockPage>
                                           TextField(
                                             controller:
                                                 _controllerSatuanBarangStock,
-                                            showCursor: false,
-                                            keyboardType: TextInputType.number,
+                                            cursorColor: Colors.lightBlueAccent,
                                             style: GoogleFonts.inter(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 13,
@@ -415,7 +414,7 @@ class _StockPageState extends State<StockPage>
                                 TextField(
                                   controller: _controllerHargaBarangStock,
                                   keyboardType: TextInputType.number,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 13,
@@ -1241,6 +1240,9 @@ class _StockPageState extends State<StockPage>
                                   _dateBulan = "";
                                   _dateTahun = "";
                                   _filterTanggalCheck = false;
+                                  _selectedDateFrom = DateTime.now();
+                                  _selectedDateBulan = DateTime.now();
+                                  _selectedDateTahun = DateTime.now();
                                   Navigator.pop(context);
                                 },
                                 child: Padding(
@@ -1281,6 +1283,9 @@ class _StockPageState extends State<StockPage>
                                       _dateBulan = "";
                                       _dateTahun = "";
                                       _filterTanggalCheck = false;
+                                      _selectedDateFrom = DateTime.now();
+                                      _selectedDateBulan = DateTime.now();
+                                      _selectedDateTahun = DateTime.now();
                                       Navigator.pop(context);
                                     });
                                   },
@@ -1757,7 +1762,21 @@ class _StockPageState extends State<StockPage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _satuanKirim = 0;
+                                _TanggalKirim = "";
+                                _dateKirim = "";
+                                _dateFrom = "";
+                                _dateBulan = "";
+                                _dateTahun = "";
+                                _filterTanggalCheck = false;
+                                _selectedDateFrom = DateTime.now();
+                                _selectedDateBulan = DateTime.now();
+                                _selectedDateTahun = DateTime.now();
+                                listStockMasuk = servicesStock
+                                    .getStockIn()
+                                    .whenComplete(() => setState(() {}));
+                              },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 18, horizontal: 18),
@@ -2539,7 +2558,7 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                       flex: 4,
                                       child: TextField(
                                         readOnly: false,
-                                        showCursor: false,
+                                        cursorColor: Colors.lightBlueAccent,
                                         keyboardType: TextInputType.number,
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w500,
@@ -2610,7 +2629,7 @@ class _TambahStokMasukState extends State<TambahStokMasuk> {
                                 const SizedBox(height: 5),
                                 TextField(
                                   readOnly: false,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   keyboardType: TextInputType.number,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,

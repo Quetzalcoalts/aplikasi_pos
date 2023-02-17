@@ -436,7 +436,7 @@ class _PenjualanPageState extends State<PenjualanPage>
                 shadowColor: Colors.black87,
                 child: TextField(
                   //controller: _controllerSearch,
-                  showCursor: false,
+                  cursorColor: Colors.lightBlueAccent,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: primaryColor,
@@ -529,70 +529,67 @@ class _PenjualanPageState extends State<PenjualanPage>
                   elevation: 15,
                   shadowColor: Colors.black87,
                   color: buttonColor,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
+                  child: ExpansionTile(
+                    maintainState: true,
+                    initiallyExpanded: false,
+                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                    expandedAlignment: Alignment.centerLeft,
+                    iconColor: buttonColor,
+                    collapsedIconColor: buttonColor,
+                    title: Column(
                       children: [
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            "ID",
-                            style: GoogleFonts.nunito(
-                              fontSize: 15,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                "ID",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  letterSpacing: 0.125,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            "Tanggal",
-                            style: GoogleFonts.nunito(
-                              fontSize: 15,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                "Tanggal",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  letterSpacing: 0.125,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            "Tgl Lunas",
-                            style: GoogleFonts.nunito(
-                              fontSize: 15,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                "Tgl Lunas",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  letterSpacing: 0.125,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Status",
-                            style: GoogleFonts.nunito(
-                              fontSize: 15,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "Status",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  letterSpacing: 0.125,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "a",
-                            style: GoogleFonts.nunito(
-                              fontSize: 10,
-                              letterSpacing: 0.125,
-                              fontWeight: FontWeight.w700,
-                              color: buttonColor,
-                            ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -809,11 +806,9 @@ class _PenjualanPageState extends State<PenjualanPage>
                                                                                   ),
                                                                                   Expanded(
                                                                                     flex: 2,
-                                                                                    child: Center(
-                                                                                      child: Text(
-                                                                                        namaStatus,
-                                                                                        style: GoogleFonts.inter(fontSize: 10, color: Color(int.parse(warnaStatus)), fontWeight: FontWeight.w600),
-                                                                                      ),
+                                                                                    child: Text(
+                                                                                      namaStatus,
+                                                                                      style: GoogleFonts.inter(fontSize: 10, color: Color(int.parse(warnaStatus)), fontWeight: FontWeight.w600),
                                                                                     ),
                                                                                   ),
                                                                                 ],
@@ -1053,9 +1048,7 @@ class _PenjualanPageState extends State<PenjualanPage>
                                                                                 ),
                                                                                 onPressed: () {
                                                                                   setState(() {
-                                                                                    _updateStatusPenjualanSelesai(snapData[1][index]['kode_transaksi'], DateTime.now(), context).whenComplete(() => setState(() {
-                                                                                      
-                                                                                    }));
+                                                                                    _updateStatusPenjualanSelesai(snapData[1][index]['kode_transaksi'], DateTime.now(), context).whenComplete(() => setState(() {}));
                                                                                   });
                                                                                 },
                                                                                 child: Wrap(
@@ -1194,6 +1187,8 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
   final _controllerJumlahBarangTambahPenjualan = TextEditingController();
   final _controllerHargaBarangTambahPenjualan = TextEditingController();
 
+  final _controllerEditPenjualan = TextEditingController();
+
   String _tempHargaBarang = "";
   String _tempTotalHargaBarang = "";
 
@@ -1207,13 +1202,13 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
   bool cekJumlah = false;
 
   final List<String> _namaStockArray = [];
-  int total_Harga_Simpan = 0;
-  int harga_Simpan = 0;
+  double total_Harga_Simpan = 0;
+  double harga_Simpan = 0;
 
   bool _readOnly = true;
 
-  int total_Jumlah_Depan = 0;
-  int total_Harga_Depan = 0;
+  double total_Jumlah_Depan = 0;
+  double total_Harga_Depan = 0;
 
   //2 : Function pilih tanggal
   Future<void> selectDateBatasPending(context) async {
@@ -1341,7 +1336,7 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
     return result;
   }
 
-  loopTotal(int a, String tipe) {
+  loopTotal(double a, String tipe) {
     if (tipe == "1") {
       total_Jumlah_Depan = a + total_Jumlah_Depan;
     } else if (tipe == "2") {
@@ -1349,7 +1344,7 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
     }
   }
 
-  loopKurangTotal(int a, int b) {
+  loopKurangTotal(double a, double b) {
     total_Jumlah_Depan = total_Jumlah_Depan - a;
     total_Harga_Depan = total_Harga_Depan - b;
   }
@@ -1416,6 +1411,7 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                     controller:
                                         _controllerNamaBarangTambahPenjualan,
                                     autofocus: false,
+                                    cursorColor: Colors.lightBlueAccent,
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 13,
@@ -1499,7 +1495,7 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                   readOnly: false,
                                   controller:
                                       _controllerJumlahBarangTambahPenjualan,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   keyboardType: TextInputType.number,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
@@ -1518,9 +1514,10 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                       });
                                     } else {
                                       setState(() {
-                                        total_Harga_Simpan = (int.parse(value) *
-                                            int.parse(_hargaTemp));
-                                        harga_Simpan = int.parse(value);
+                                        total_Harga_Simpan =
+                                            double.parse(value) *
+                                                double.parse(_hargaTemp);
+                                        harga_Simpan = double.parse(value);
                                       });
                                     }
                                     debugPrint(value);
@@ -1634,7 +1631,8 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: TextButton(
                                   onPressed: () {
-                                    if (int.parse(_jumlahTemp) < harga_Simpan) {
+                                    if (double.parse(_jumlahTemp) <
+                                        harga_Simpan) {
                                       setState(() {
                                         cekJumlah = true;
                                       });
@@ -1649,14 +1647,14 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                               _controllerJumlahBarangTambahPenjualan
                                                   .text);
                                           loopTotal(
-                                              int.parse(
+                                              double.parse(
                                                   _controllerJumlahBarangTambahPenjualan
                                                       .text),
                                               "1");
                                           _listHargaBarangTambahPenjualan.add(
                                               _splitStringRP(
                                                   CurrencyFormat.convertToIdr(
-                                                      int.parse(_hargaTemp),
+                                                      double.parse(_hargaTemp),
                                                       0)));
                                           _listKodeBarangTambahPenjualan
                                               .add(_kodeTemp);
@@ -1668,6 +1666,7 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                               .add(total_Harga_Simpan);
                                           loopTotal(total_Harga_Simpan, "2");
                                         });
+
                                         _controllerNamaBarangTambahPenjualan
                                             .clear();
                                         _controllerJumlahBarangTambahPenjualan
@@ -1868,6 +1867,205 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
     var split = value.indexOf(" ");
     var temp = value.substring(split, val.length);
     return temp;
+  }
+
+  _showEditPenjualan(
+      dw, dh, namaBarang, hargaBarang, jumlahBarang, totalHargaBarang, ind) {
+    showDialog(
+      barrierDismissible: false,
+      useRootNavigator: true,
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
+                ),
+                child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  controller: ScrollController(),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            "Edit $namaBarang",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const Divider(
+                          thickness: 1,
+                          height: 20,
+                        ),
+                        Container(
+                            padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Jumlah",
+                                  style: GoogleFonts.inter(
+                                    color: buttonColor,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                TextField(
+                                  controller: _controllerEditPenjualan,
+                                  cursorColor: Colors.lightBlueAccent,
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13,
+                                  ),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: const Color(0xffE5E5E5),
+                                    hintText: 'Input Perubahan Jumlah',
+                                    hintStyle: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 0, horizontal: 10),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Divider(
+                          thickness: 1,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "Cancel",
+                                  style: GoogleFonts.inter(
+                                    color: darkText,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 17,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                                height: 50,
+                                child: VerticalDivider(thickness: 1)),
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {
+                                  _listTotalHargaBarangTambahPenjualan[ind] =
+                                      _splitStringRP(
+                                          CurrencyFormat.convertToIdr(
+                                              double.parse(
+                                                      _controllerEditPenjualan
+                                                          .text) *
+                                                  double.parse(hargaBarang
+                                                      .replaceAll(".", "")),
+                                              0));
+                                  _listJumlahBarangTambahPenjualan[ind] =
+                                      _controllerEditPenjualan.text;
+                                  if (double.parse(
+                                          _controllerEditPenjualan.text) <
+                                      double.parse(jumlahBarang)) {
+                                    setState(() {
+                                      loopKurangTotal(
+                                          (double.parse(jumlahBarang) -
+                                              double.parse(
+                                                  _controllerEditPenjualan
+                                                      .text)),
+                                          (double.parse(totalHargaBarang
+                                                  .replaceAll(".", "")) -
+                                              double.parse(
+                                                  _listTotalHargaBarangTambahPenjualan[
+                                                          ind]
+                                                      .replaceAll(".", ""))));
+                                    });
+                                  } else {
+                                    setState(() {
+                                      loopTotal(
+                                          (double.parse(_controllerEditPenjualan
+                                                  .text) -
+                                              double.parse(jumlahBarang)),
+                                          "1");
+                                      loopTotal(
+                                          (double.parse(
+                                                  _listTotalHargaBarangTambahPenjualan[
+                                                          ind]
+                                                      .replaceAll(".", "")) -
+                                              double.parse(totalHargaBarang
+                                                  .replaceAll(".", ""))),
+                                          "2");
+                                    });
+                                  }
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "Ok",
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 17,
+                                    color: darkText,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).whenComplete(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -2129,6 +2327,30 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                                   fontWeight: FontWeight.w600),
                                             ),
                                           ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Center(
+                                            child: Text(
+                                              "a",
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 13,
+                                                  color: buttonColor,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Center(
+                                            child: Text(
+                                              "a",
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 13,
+                                                  color: buttonColor,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
                                         )
                                       ],
                                     ),
@@ -2221,10 +2443,10 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                                 onPressed: () {
                                                   setState(() {
                                                     loopKurangTotal(
-                                                        int.parse(
+                                                        double.parse(
                                                             _listJumlahBarangTambahPenjualan[
                                                                 index]),
-                                                        int.parse(
+                                                        double.parse(
                                                             _listTotalHargaBarangTambahPenjualan[
                                                                     index]
                                                                 .replaceAll(
@@ -2247,6 +2469,47 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                                 },
                                                 icon:
                                                     const Icon(Icons.delete))),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Center(
+                                          child: Text(
+                                            "a",
+                                            style: GoogleFonts.inter(
+                                                fontSize: 13,
+                                                color: lightText,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  _controllerEditPenjualan
+                                                          .text =
+                                                      _listJumlahBarangTambahPenjualan[
+                                                          index];
+                                                  _controllerNamaBarangTambahPenjualan
+                                                          .text =
+                                                      _listNamaBarangTambahPenjualan[
+                                                          index];
+                                                  _showEditPenjualan(
+                                                      deviceWidth,
+                                                      deviceHeight,
+                                                      _listNamaBarangTambahPenjualan[
+                                                          index],
+                                                      _listHargaBarangTambahPenjualan[
+                                                          index],
+                                                      _listJumlahBarangTambahPenjualan[
+                                                          index],
+                                                      _listTotalHargaBarangTambahPenjualan[
+                                                          index],
+                                                      index);
+                                                },
+                                                icon: const Icon(Icons.edit))),
                                       )
                                     ],
                                   )),
@@ -2325,6 +2588,33 @@ class _TambahPenjualanState extends State<TambahPenjualan> {
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11,
                                           ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "Rp",
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.inter(
+                                            color: lightText,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Center(
+                                        child: Text(
+                                          "a",
+                                          style: GoogleFonts.inter(
+                                              fontSize: 13,
+                                              color: lightText,
+                                              fontWeight: FontWeight.w600),
                                         ),
                                       ),
                                     ),
