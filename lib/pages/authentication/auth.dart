@@ -84,11 +84,9 @@ class _AuthPageState extends State<AuthPage> {
           IdSP = pref.getString('Id_User') ?? "";
         } else {
           berhasiLogin = false;
-          print("Masuk else");
         }
       } else {
         berhasiLogin = false;
-        print("Masuk else");
       }
     }
     print(usernameSP);
@@ -167,6 +165,13 @@ class _AuthPageState extends State<AuthPage> {
                               : Color.fromRGBO(229, 229, 229, 1),
                         ),
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
                 ),
@@ -209,10 +214,15 @@ class _AuthPageState extends State<AuthPage> {
                         borderSide: BorderSide(
                           width: 0,
                           style: BorderStyle.none,
-                          color: strok == true
-                              ? Colors.red
-                              : Color.fromRGBO(229, 229, 229, 1),
+                          color: strok == true ? Colors.red : buttonColor,
                         ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       suffixIcon: IconButton(
                         onPressed: () {
