@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new
+// ignore_for_file: prefer_const_constructors, unnecessary_new, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -21,6 +21,10 @@ bool strok = false;
 bool hidePass = true;
 final TextEditingController controllerUsername = TextEditingController();
 final TextEditingController controllerPassword = TextEditingController();
+String usernameSP = "";
+String passwordSP = "";
+bool statusSP = false;
+String IdSP = "";
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -31,37 +35,63 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   var berhasiLogin = false;
-  Login(username, password) async {
-    final usernameSP = await SharedPreferences.getInstance();
-    final passwordSP = await SharedPreferences.getInstance();
-    final statusSP = await SharedPreferences.getInstance();
-    final IdSP = await SharedPreferences.getInstance();
+  final pref = SharedPreferences.getInstance();
 
+  void initState() {
+    super.initState();
+    checkSP();
+  }
+
+  checkSP() async {
+    final pref = await SharedPreferences.getInstance();
+    statusSP = pref.getBool("statusLogin") ?? false;
+    if (statusSP == true) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext) => HomePage(),
+        ),
+      );
+    } else {
+      berhasiLogin = false;
+    }
+  }
+
+  Login(username, password) async {
+    final pref = await SharedPreferences.getInstance();
     var url = Uri.parse(
         "http://kostsoda.onthewifi.com:38600/us/login?username=$username&password=$password");
     var response = await http.get(url);
-    var jsonStatus = json.decode(response.body)['status'];
-
-    if (jsonStatus == 200) {
+    if (statusSP == true) {
+      berhasiLogin = true;
+    } else {
+      var jsonStatus = json.decode(response.body)['status'];
       var jsonKode = json.decode(response.body)['data']['kode_user'];
       var jsonUsername = json.decode(response.body)['data']['username'];
       var jsonPassword = json.decode(response.body)['data']['password'];
-      if (jsonUsername != "" && jsonPassword != "") {
-        berhasiLogin = true;
+      if (jsonStatus == 200) {
+        if (jsonUsername != "" && jsonPassword != "") {
+          berhasiLogin = true;
 
-        usernameSP.setString("namaUser", jsonUsername);
-        IdSP.setString('Id_User', jsonKode);
+          pref.setString("namaUser", jsonUsername);
+          pref.setString("passwordUser", jsonPassword);
+          pref.setBool("statusLogin", berhasiLogin);
+          pref.setString("Id_User", jsonKode);
 
-        usernameA = usernameSP.getString("namaUser");
-        Id = IdSP.getString('Id_User');
+          usernameSP = pref.getString("namaUser") ?? "";
+          passwordSP = pref.getString("passwordUser") ?? "";
+          statusSP = pref.getBool("statusLogin") ?? false;
+          IdSP = pref.getString('Id_User') ?? "";
+        } else {
+          berhasiLogin = false;
+          print("Masuk else");
+        }
       } else {
         berhasiLogin = false;
         print("Masuk else");
       }
-    } else {
-      berhasiLogin = false;
-      print("Masuk else");
     }
+    print(usernameSP);
   }
 
   void clear() {
