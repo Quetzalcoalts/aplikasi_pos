@@ -221,31 +221,35 @@ class _SettingPageState extends State<SettingPage> {
                         ),
                       );
                     },
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffD9D9D9),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: const Image(
-                            image: AssetImage(
-                              'lib/assets/images/Paper.png',
+                    child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffD9D9D9),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: const Image(
+                              image: AssetImage(
+                                'lib/assets/images/Paper.png',
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 25),
-                        Text(
-                          "Retur",
-                          style: GoogleFonts.inter(
-                            color: darkText,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                          const SizedBox(width: 25),
+                          Text(
+                            "Retur",
+                            style: GoogleFonts.inter(
+                              color: darkText,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -258,31 +262,35 @@ class _SettingPageState extends State<SettingPage> {
                         ),
                       );
                     },
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffD9D9D9),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: const Image(
-                            image: AssetImage(
-                              'lib/assets/images/Profile.png',
+                    child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffD9D9D9),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: const Image(
+                              image: AssetImage(
+                                'lib/assets/images/Profile.png',
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 25),
-                        Text(
-                          "Edit Profile",
-                          style: GoogleFonts.inter(
-                            color: darkText,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                          const SizedBox(width: 25),
+                          Text(
+                            "Edit Profile",
+                            style: GoogleFonts.inter(
+                              color: darkText,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -298,31 +306,35 @@ class _SettingPageState extends State<SettingPage> {
                       tutupBuku(_formattedDateFrom, context)
                           .whenComplete(() => Navigator.pop(context));
                     },
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffD9D9D9),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: const Image(
-                            image: AssetImage(
-                              'lib/assets/images/tutupBuku.png',
+                    child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffD9D9D9),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: const Image(
+                              image: AssetImage(
+                                'lib/assets/images/tutupBuku.png',
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 25),
-                        Text(
-                          "Tutup Pembukuan",
-                          style: GoogleFonts.inter(
-                            color: darkText,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                          const SizedBox(width: 25),
+                          Text(
+                            "Tutup Pembukuan",
+                            style: GoogleFonts.inter(
+                              color: darkText,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -335,31 +347,35 @@ class _SettingPageState extends State<SettingPage> {
                         ),
                       );
                     },
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffD9D9D9),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: const Image(
-                            image: AssetImage(
-                              'lib/assets/images/3User.png',
+                    child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffD9D9D9),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: const Image(
+                              image: AssetImage(
+                                'lib/assets/images/3User.png',
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 25),
-                        Text(
-                          "Pilih Supplier",
-                          style: GoogleFonts.inter(
-                            color: darkText,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                          const SizedBox(width: 25),
+                          Text(
+                            "Supplier",
+                            style: GoogleFonts.inter(
+                              color: darkText,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -367,31 +383,35 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       _showLogout(deviceWidth, deviceHeight);
                     },
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffD9D9D9),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: const Image(
-                            image: AssetImage(
-                              'lib/assets/images/Logout.png',
+                    child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffD9D9D9),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: const Image(
+                              image: AssetImage(
+                                'lib/assets/images/Logout.png',
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 25),
-                        Text(
-                          "Logout",
-                          style: GoogleFonts.inter(
-                            color: darkText,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                          const SizedBox(width: 25),
+                          Text(
+                            "Logout",
+                            style: GoogleFonts.inter(
+                              color: darkText,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -496,7 +516,7 @@ class _EditProfileState extends State<EditProfile> {
                                 TextField(
                                   controller: _controllerUpdate,
                                   obscureText: pw ? _passwordVisible : false,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 13,
@@ -872,7 +892,7 @@ class _SupplierPageState extends State<SupplierPage> {
                                 const SizedBox(height: 10),
                                 TextField(
                                   controller: _controllerNamaSup,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 13,
@@ -920,8 +940,9 @@ class _SupplierPageState extends State<SupplierPage> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextField(
+                                  maxLength: 15,
                                   controller: _controllerNoSup,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   keyboardType: TextInputType.number,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
@@ -957,9 +978,6 @@ class _SupplierPageState extends State<SupplierPage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
                                 Text(
                                   "Email",
                                   style: GoogleFonts.inter(
@@ -971,7 +989,7 @@ class _SupplierPageState extends State<SupplierPage> {
                                 const SizedBox(height: 10),
                                 TextField(
                                   controller: _controllerEmailSup,
-                                  showCursor: false,
+                                  cursorColor: Colors.lightBlueAccent,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 13,
@@ -1236,7 +1254,7 @@ class _SupplierPageState extends State<SupplierPage> {
               shadowColor: Colors.black87,
               child: TextField(
                 //controller: _controllerSearch,
-                showCursor: false,
+                cursorColor: Colors.lightBlueAccent,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: primaryColor,
@@ -2142,7 +2160,7 @@ class _ReturPageState extends State<ReturPage> {
                               const SizedBox(height: 10),
                               TextField(
                                 controller: _ctrlJumlahRetur,
-                                showCursor: false,
+                                cursorColor: Colors.lightBlueAccent,
                                 style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 13,
@@ -2299,7 +2317,7 @@ class _ReturPageState extends State<ReturPage> {
               shadowColor: Colors.black87,
               child: TextField(
                 //controller: _controllerSearch,
-                showCursor: false,
+                cursorColor: Colors.lightBlueAccent,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: primaryColor,
@@ -2352,82 +2370,79 @@ class _ReturPageState extends State<ReturPage> {
               elevation: 15,
               shadowColor: Colors.black87,
               color: buttonColor,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
+              child: ExpansionTile(
+                maintainState: true,
+                initiallyExpanded: false,
+                expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                expandedAlignment: Alignment.centerLeft,
+                iconColor: buttonColor,
+                collapsedIconColor: buttonColor,
+                title: Column(
                   children: [
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        "ID",
-                        style: GoogleFonts.nunito(
-                          fontSize: 12,
-                          letterSpacing: 0.125,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: Text(
+                            "ID",
+                            style: GoogleFonts.nunito(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        "Tanggal",
-                        style: GoogleFonts.nunito(
-                          fontSize: 12,
-                          letterSpacing: 0.125,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                        Expanded(
+                          flex: 4,
+                          child: Text(
+                            "Tanggal",
+                            style: GoogleFonts.nunito(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        "Barang",
-                        style: GoogleFonts.nunito(
-                          fontSize: 12,
-                          letterSpacing: 0.125,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                        Expanded(
+                          flex: 4,
+                          child: Text(
+                            "Barang",
+                            style: GoogleFonts.nunito(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        "Return",
-                        style: GoogleFonts.nunito(
-                          fontSize: 12,
-                          letterSpacing: 0.125,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            "Return",
+                            style: GoogleFonts.nunito(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        "Jumlah",
-                        style: GoogleFonts.nunito(
-                          fontSize: 12,
-                          letterSpacing: 0.125,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            "Jumlah",
+                            style: GoogleFonts.nunito(
+                              fontSize: 12,
+                              letterSpacing: 0.125,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        "",
-                        style: GoogleFonts.nunito(
-                          fontSize: 12,
-                          letterSpacing: 0.125,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
@@ -2455,82 +2470,114 @@ class _ReturPageState extends State<ReturPage> {
                           ),
                           color: lightText,
                           //masih ada masalah di title card
-                          child: ListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: ExpansionTile(
+                            maintainState: true,
+                            initiallyExpanded: false,
+                            expandedCrossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            expandedAlignment: Alignment.centerLeft,
+                            iconColor: darkText,
+                            collapsedIconColor: darkText,
+                            title: Column(
                               children: [
-                                Expanded(
-                                  flex: 4,
-                                  child: Text(
-                                    snapData[1][index]['id_retur'],
-                                    style: GoogleFonts.inter(
-                                        fontSize: 10,
-                                        letterSpacing: 0.125,
-                                        fontWeight: FontWeight.w500,
-                                        color: darkText),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 4,
-                                  child: Text(
-                                    snapData[1][index]['tanggal_retur'],
-                                    style: GoogleFonts.inter(
-                                        fontSize: 10,
-                                        letterSpacing: 0.125,
-                                        fontWeight: FontWeight.w500,
-                                        color: darkText),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 4,
-                                  child: Text(
-                                    snapData[1][index]['nama_barang'],
-                                    style: GoogleFonts.inter(
-                                        fontSize: 9,
-                                        letterSpacing: 0.125,
-                                        fontWeight: FontWeight.w500,
-                                        color: darkText),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 4,
-                                  child: Text(
-                                    snapData[1][index]['status_retur'] == 0
-                                        ? "Barang"
-                                        : "Uang",
-                                    style: GoogleFonts.inter(
-                                        fontSize: 10,
-                                        letterSpacing: 0.125,
-                                        fontWeight: FontWeight.w500,
-                                        color: darkText),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    snapData[1][index]['jumlah_barang']
-                                        .toString(),
-                                    style: GoogleFonts.inter(
-                                        fontSize: 10,
-                                        letterSpacing: 0.125,
-                                        fontWeight: FontWeight.w500,
-                                        color: darkText),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "",
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 12,
-                                      letterSpacing: 0.125,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 6,
+                                      child: Text(
+                                        snapData[1][index]['id_retur'],
+                                        style: GoogleFonts.inter(
+                                            fontSize: 10,
+                                            letterSpacing: 0.125,
+                                            fontWeight: FontWeight.w500,
+                                            color: darkText),
+                                      ),
                                     ),
-                                  ),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Text(
+                                        snapData[1][index]['tanggal_retur'],
+                                        style: GoogleFonts.inter(
+                                            fontSize: 10,
+                                            letterSpacing: 0.125,
+                                            fontWeight: FontWeight.w500,
+                                            color: darkText),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Center(
+                                        child: Text(
+                                          snapData[1][index]['nama_barang'],
+                                          style: GoogleFonts.inter(
+                                              fontSize: 9,
+                                              letterSpacing: 0.125,
+                                              fontWeight: FontWeight.w500,
+                                              color: darkText),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Center(
+                                        child: Text(
+                                          snapData[1][index]['status_retur'] ==
+                                                  0
+                                              ? "Barang"
+                                              : "Uang",
+                                          style: GoogleFonts.inter(
+                                              fontSize: 10,
+                                              letterSpacing: 0.125,
+                                              fontWeight: FontWeight.w500,
+                                              color: darkText),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Center(
+                                        child: Text(
+                                          snapData[1][index]['jumlah_barang']
+                                              .toString(),
+                                          style: GoogleFonts.inter(
+                                              fontSize: 10,
+                                              letterSpacing: 0.125,
+                                              fontWeight: FontWeight.w500,
+                                              color: darkText),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 5, 15, 15),
+                                      child: Column(
+                                        children: [
+                                          const Divider(
+                                            thickness: 1,
+                                            color: Color(0xFF7A7A7A),
+                                          ),
+                                          Text(
+                                            snapData[1][index]['keterangan'],
+                                            style: GoogleFonts.inter(
+                                                fontSize: 10,
+                                                letterSpacing: 0.125,
+                                                color: darkText,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
+                                      ))
+                                ],
+                              )
+                            ],
                           ),
                         );
                       },
